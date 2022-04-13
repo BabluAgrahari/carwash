@@ -93,8 +93,9 @@ return [
 
         'mongodb' => [
             'driver' => 'mongodb',
-            'dsn' => env('DB_URI', 'mongodb+srv://callcenter:ZsQV4Vpihi6vVqAZ@cluster0.gcdem.mongodb.net/callcenter?retryWrites=true&w=majority'),
-            'database' => 'test',
+            'dsn'=>env('DB_URI','mongodb+srv://callcenter:ZsQV4Vpihi6vVqAZ@cluster0.gcdem.mongodb.net/callcenter?retryWrites=true&w=majority'),
+           // 'dsn' => env('DB_URI', 'mongodb://admin:1df54119a5d154b4fec4383f@localhost:12109/?authSource=admin&readPreference=primary&directConnection=true&ssl=false'),
+            'database' => 'carwash',
         ],
 
 

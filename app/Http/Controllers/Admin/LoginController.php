@@ -1,99 +1,69 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
-
 use App\Http\Controllers\Controller;
-use App\Http\Validation\LoginValidation;
-use App\Http\Validation\OTPValidation;
-use App\Models\User;
+use App\Http\Request\Validation\Admin\LoginRequest;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
+// use Tymon\JWTAuth\JWTAuth;
 class LoginController extends Controller
 {
-    public function index()
-    {
-        return view('admin.login');
-    }
-
-
-    public function store(LoginValidation $request)
+    public function store(Request $request)
     {
         try {
-
-
-            $remember_me = $request->has('remember_me') ? true : false;
             $credentials = $request->only('email', 'password');
-
-            if (Auth::attempt($credentials)) {
-
-                if (Auth::user()->role == 'retailer') {
-
-                    $otp = mt_rand(1111, 9999);
-
-                    $user = User::where('_id', Auth::user()->_id)->where('mobile_number', Auth::user()->mobile_number)->first();
-                    $user->otp = $otp;
-                    $data  = ['otp' => $otp, 'msg' => '<span class="text-success">Otp Sent Successfully!</span>'];
-                    if ($user->save())
-                        return redirect()->intended('otp-sent')->with('message', $data);
-
-                } else if (Auth::user()->role == 'employee') {
-                    return redirect()->intended('employee/dashboard')
-                        ->withSuccess('Signed in');
-
-                } else if (Auth::user()->role == 'admin') {
-                    return redirect()->intended('admin/dashboard')
-                        ->withSuccess('Signed in');
-                }
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Login credentials are invalid.',
+                ], 400);
             }
-            return redirect()->back()->with('success', 'Invalid credentials!');
-        } catch (Exception $e) {
-            return redirect('500')->with('error', $e->getMessage());
+        } catch (JWTException $e) {
+            return $credentials;
+            return response()->json([
+                'status' => false,
+                'message' => 'Could not create token.',
+            ], 500);
+
         }
+
+
+
+        //Token created, return with success response and jwt token
+
+        return $this->createNewToken($token);
+
     }
 
 
-    public function otpSent()
+
+    protected function createNewToken($token)
+
     {
-        return view('admin.send_otp');
-    }
+        $user['name'] = auth()->user()->full_name;
+
+        $user['email'] = auth()->user()->email;
 
 
-    public function verifyMobile(Request $request)
-    {
 
-        $validatedData = $request->validate([
-            'otp'  => 'required'
+        return response()->json([
+
+            'status' => true,
+
+            'access_token' => $token,
+
+            'token_type' => 'bearer',
+
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
+
+            'user' => $user
+
         ]);
 
-        $otp = implode(',', $request->otp);
-        $otp = trim(str_replace(',', '', $otp));
-        $id  = Auth::user()->_id;
-
-        $count = User::where('otp', (int)$otp)->where('_id', $id)->count();
-        if ($count > 0) {
-            $user = User::find($id);
-            $user->verify_otp = 1;
-
-            if ($user->save())
-                return redirect()->intended('retailer/dashboard');
-
-            return redirect()->back()->with('message', array('otp' => '', 'msg' => '<span class="custom-text-danger">Somthing went wrong, Please contact to Admin.</span>'));
-        }
-
-        return redirect()->back()->with('message', array('otp' => '', 'msg' => '<span class="custom-text-danger">OTP not Verified, Please try again.</span>'));
     }
 
 
-    public function logout()
-    {
-        $user = User::find(Auth::user()->_id);
-        if ($user->role == 'retailer') {
-            $user->verify_otp = 0;
-            $user->save();
-        }
-        Auth::logout();
-        return redirect('/');
-    }
+
 }
