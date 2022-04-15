@@ -33,37 +33,12 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('getUserDetails', [LoginController::class, 'get_user']);
 
     Route::resource('category', CategoryController::class);
+    Route::resource('vehicleBrand', VehicleBrandController::class);
+    Route::resource('vehicleModel', VehicleModelController::class);
+    Route::resource('services', ServiceController::class);
+    Route::resource('shopOwner', ShopOwnerController::class);
 
-    Route::group(['prefix' => 'vehicleBrand'], function () {
-        Route::get('get', [VehicleBrandController::class, 'index']);
-        Route::get('show/{id}', [VehicleBrandController::class, 'show']);
-        Route::post('create', [VehicleBrandController::class, 'store']);
-        Route::post('update/{vehicleBrand}',  [VehicleBrandController::class, 'update']);
-        Route::delete('delete/{vehicleBrand}',  [VehicleBrandController::class, 'destroy']);
-    });
-    Route::group(['prefix' => 'vehicleModel'], function () {
-        Route::get('get', [VehicleModelController::class, 'index']);
-        Route::get('show/{id}', [VehicleModelController::class, 'show']);
-        Route::post('create', [VehicleModelController::class, 'store']);
-        Route::post('update/{vehicleBrand}',  [VehicleModelController::class, 'update']);
-        Route::delete('delete/{vehicleBrand}',  [VehicleModelController::class, 'destroy']);
-    });
-    Route::group(['prefix' => 'services'], function () {
-        Route::get('get', [ServiceController::class, 'index']);
-        Route::get('show/{id}', [ServiceController::class, 'show']);
-        Route::post('create', [ServiceController::class, 'store']);
-        Route::post('update/{service}',  [ServiceController::class, 'update']);
-        Route::delete('delete/{service}',  [ServiceController::class, 'destroy']);
-    });
-    Route::group(['prefix' => 'shopOwner'], function () {
-        Route::get('get', [ShopOwnerController::class, 'index']);
-        Route::get('show/{id}', [ShopOwnerController::class, 'show']);
-        Route::post('create', [ShopOwnerController::class, 'store']);
-        Route::post('update/{shopOwner}',  [ShopOwnerController::class, 'update']);
-        Route::delete('delete/{shopOwner}',  [ShopOwnerController::class, 'destroy']);
-    });
 });
-
 
 //for mobile application
 Route::get('service', [Apps::class, 'index']);
