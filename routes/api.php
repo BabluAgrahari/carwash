@@ -29,22 +29,12 @@ Route::post('register', [LoginController::class, 'register']);
 
 Route::group(['middleware' => ['jwt.verify']], function () {
 
-
     Route::get('logout', [LoginController::class, 'logout']);
     Route::get('getUserDetails', [LoginController::class, 'get_user']);
 
- Route::resource('category', CategoryController::class);
+    Route::resource('category', CategoryController::class);
 
-    // Route::group(['prefix' => 'categories'], function () {
-    //     Route::get('get', [CategoryController::class, 'index']);
-    //     Route::get('show/{id}', [CategoryController::class, 'show']);
-    //     Route::post('create', [CategoryController::class, 'store']);
-    //     Route::post('update/{category}',  [CategoryController::class, 'update']);
-    //     Route::delete('delete/{category}',  [CategoryController::class, 'destroy']);
-    // });
-    // Route::apiResource('category',)
-
-        Route::group(['prefix' => 'vehicleBrand'], function () {
+    Route::group(['prefix' => 'vehicleBrand'], function () {
         Route::get('get', [VehicleBrandController::class, 'index']);
         Route::get('show/{id}', [VehicleBrandController::class, 'show']);
         Route::post('create', [VehicleBrandController::class, 'store']);
@@ -76,7 +66,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
 
 //for mobile application
-  Route::get('service', [Apps::class, 'index']);
+Route::get('service', [Apps::class, 'index']);
 
 
 Route::any('{any}', function () {

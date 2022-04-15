@@ -14,14 +14,14 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
 
-    public function show()
-    {
+    // public function show()
+    // {
 
-        $data = ['email' => "agraharibablu99@gmail.com", "subject" => 'send', 'msg' => 'qorking'];
-        $email = new SupportEmail();
+    //     $data = ['email' => "agraharibablu99@gmail.com", "subject" => 'send', 'msg' => 'qorking'];
+    //     $email = new SupportEmail();
 
-        $email->composeEmail($data);
-    }
+    //     $email->composeEmail($data);
+    // }
 
 
     public function getBlance0()
