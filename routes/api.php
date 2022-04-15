@@ -33,6 +33,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('getUserDetails', [LoginController::class, 'get_user']);
 
     Route::resource('category', CategoryController::class);
+    Route::resource('vehicle-brand', CategoryController::class);
 
     Route::group(['prefix' => 'vehicleBrand'], function () {
         Route::get('get', [VehicleBrandController::class, 'index']);
