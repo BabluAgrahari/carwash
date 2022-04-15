@@ -128,9 +128,9 @@ class ServiceController extends Controller
                 $service->video = $path;
             }
             if ($service->save())
-                return response(['status' => 'success', 'message' => 'Service created successfully!']);
+                return response(['status' => 'success', 'message' => 'Service Updated successfully!']);
 
-            return response(['status' => 'error', 'message' => 'Service not created Successfully!']);
+            return response(['status' => 'error', 'message' => 'Service Not Updated Successfully!']);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
