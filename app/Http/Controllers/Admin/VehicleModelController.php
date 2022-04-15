@@ -1,135 +1,83 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
-use App\Models\VehicleModel;
-use Illuminate\Http\Request;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Symfony\Component\HttpFoundation\Response;
-use App\Http\Requests\validation\Api\CreateVehicleModelRequest;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Admin\VehicleModel;
+use Exception;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\validation\Admin\CreateVehicleModel;
 
 class VehicleModelController extends Controller
 {
-    protected $user;
-
-    public function __construct()
-    {
-        $this->user = JWTAuth::parseToken()->authenticate();
-    }
-
     public function index()
     {
-        return $this->user
-            ->vehicleModels()
-            ->get();
-    }
-
-
-    public function create()
-    {
-        //
-    }
-
-
-    public function store(CreateVehicleModelRequest $request)
-    {
         try {
-        
-            //Request is valid, create new vehicle model
-            $vehicleModel = new VehicleModel();
-            $data = [
-                'name' => $request->name,
-                'brand_id' => $request->brand_id,
-                'user_id' => $this->user->id,
-            ];
-
-            foreach ($data as $key => $res) {
-                $vehicleModel->$key = $res;
-            }
-
-            if ($vehicleModel->save()) {
-                //vehicle Model created, return success response
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Vehicle Model created successfully',
-                    'data' => $vehicleModel
-                ], Response::HTTP_OK);
-            }
-            return response()->json([
-                'success' => false,
-                'message' => 'Vehicle Brand not Created!',
-            ], 400);
-        } catch (\Exception $e) {
-            return response(['status' => 'error', 'msg' => $e->getMessage()]);
+            $list = VehicleModel::get();
+            return response(['status' => true, 'data' => $list]);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
+    }
+
+
+    public function store(CreateVehicleModel $request)
+    {
+
+        try {
+            $vehicleModel = new VehicleModel();
+            $vehicleModel->user_id  = Auth::user()->_id;
+            $vehicleModel->name     = $request->name;
+            $vehicleModel->brand_id = $request->brand_id;
+            $vehicleModel->status   = $request->status;
+
+            if (!empty($request->file('icon')))
+                $vehicleModel->icon  = singleFile($request->file('icon'), 'icon/');
+
+            if ($vehicleModel->save())
+                return response(['status' => 'success', 'message' => 'Vehicle Model created Successfully!']);
+
+            return response(['status' => 'error', 'message' => 'Vehicle Model not created Successfully!']);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
+        } 
     }
 
     public function show($id)
     {
-        $vehicleModel = VehicleModel::find($id);
-
-        if (!$vehicleModel) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, Vehicle Model not found.'
-            ], 400);
+        try {
+            $list = VehicleModel::find($id);
+            return response(['status' => true, 'data' => $list]);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
-
-        return $vehicleModel;
     }
 
-    public function edit(VehicleModel $vehicleModel)
-    {
-        //
-    }
-
-
-    public function update(CreateVehicleModelRequest  $request, $id)
+    public function update(CreateVehicleModel  $request, $id)
     {
         try {
-            //Validate data
             $vehicleModel = VehicleModel::find($id);
+            $vehicleModel->name     = $request->name;
+            $vehicleModel->brand_id = $request->brand_id;
+            $vehicleModel->status   = $request->status;
 
-            //Request is valid, update vehicle Model
-            $data = [
-                'name' => $request->name,
-                'brand_id' => $request->brand_id
-            ];
+            if (!empty($request->file('icon')))
+                $vehicleModel->icon  = singleFile($request->file('icon'), 'icon/');
 
-            foreach ($data as $key => $res) {
-                $vehicleModel->$key = $res;
-            }
-            //Vehicle Model updated, return success response
-            if ($vehicleModel->save()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Vehicle Model updated successfully',
-                    'data' => $vehicleModel
-                ], Response::HTTP_OK);
-            }
-            return response()->json([
-                'success' => false,
-                'message' => 'Vehicle Brand not Updated!',
-            ], 400);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ]);
+            if ($vehicleModel->save())
+                return response(['status' => 'success', 'message' => 'Vehicle Model updated Successfully!']);
+
+            return response(['status' => 'error', 'message' => 'Vehicle Model not updated!']);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
-
 
     public function destroy(VehicleModel $vehicleModel)
     {
-        $vehicleModel->delete();
+        if($vehicleModel->delete())
+        return response(['status' => 'success', 'message' => 'Category deleted Successfully!']);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Vehicle Model deleted successfully'
-        ], Response::HTTP_OK);
+         return response(['status' => 'error', 'message' => 'Category not deleted!']);
     }
 }

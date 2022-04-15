@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\validation\Api;
+namespace App\Http\Requests\validation\Admin;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateVehicleModelRequest extends FormRequest
+class CreateVehicleModel extends FormRequest
 {
 
     public function authorize()

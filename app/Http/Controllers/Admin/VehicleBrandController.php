@@ -1,141 +1,80 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
-use App\Models\VehicleBrand;
-use Illuminate\Http\Request;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Symfony\Component\HttpFoundation\Response;
-use App\Http\Requests\validation\Api\CreateVehicleBrandRequest;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Admin\VehicleBrand;
+use Exception;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\validation\Admin\CreateVehicleBrand;
 
 class VehicleBrandController extends Controller
 {
-    protected $user;
-
-    public function __construct()
-    {
-        $this->user = JWTAuth::parseToken()->authenticate();
-    }
-
     public function index()
     {
-        return $this->user
-            ->vehicleBrands()
-            ->get();
+        try {
+            $list = VehicleBrand::get();
+            return response(['status' => true, 'data' => $list]);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
+        }
     }
 
-
-    public function create()
-    {
-        //
-    }
-
-
-    public function store(CreateVehicleBrandRequest $request)
+    public function store(CreateVehicleBrand $request)
     {
         try {
-           
-            //Request is valid, create new vehicle Brand
             $vehicleBrand = new VehicleBrand();
-            $data = [
-                'name' => $request->name,
-                'user_id' => $this->user->id,
-                'status' => (int)1,
-            ];
+            $vehicleBrand->user_id = Auth::user()->_id;
+            $vehicleBrand->name = $request->name;
+            $vehicleBrand->status = $request->status;
 
             if (!empty($request->file('icon')))
-                $data['icon']  = singleFile($request->file('icon'), 'icon/');
+                $vehicleBrand->icon  = singleFile($request->file('icon'), 'icon/');
 
-            foreach ($data as $key => $res) {
-                $vehicleBrand->$key = $res;
-            }
+            if ($vehicleBrand->save())
+                return response(['status' => 'success', 'message' => 'Vehicle Brand created Successfully!']);
 
-            if ($vehicleBrand->save()) {
-                //vehicle Brand created, return success response
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Vehicle Brand created successfully',
-                    'data' => $vehicleBrand
-                ], Response::HTTP_OK);
-            }
-            return response()->json([
-                'success' => false,
-                'message' => 'Vehicle Brand not Created!',
-            ], 400);
-        } catch (\Exception $e) {
-            return response(['status' => 'error', 'msg' => $e->getMessage()]);
-        }
+            return response(['status' => 'error', 'message' => 'Vehicle Brand not created Successfully!']);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
+        } 
     }
 
     public function show($id)
     {
-        $vehicleBrand = VehicleBrand::find($id);
-
-        if (!$vehicleBrand) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, Vehicle Brand not found.'
-            ], 400);
+        try {
+            $list = VehicleBrand::find($id);
+            return response(['status' => true, 'data' => $list]);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
-
-        return $vehicleBrand;
     }
 
-    public function edit(VehicleBrand $vehicleBrand)
-    {
-        //
-    }
-
-
-    public function update(CreateVehicleBrandRequest  $request, $id)
+    public function update(CreateVehicleBrand  $request, $id)
     {
         try {
-            //Validate data
             $vehicleBrand = VehicleBrand::find($id);
-
-            //Request is valid, update vehicle Brand
-            $data = [
-                'name' => $request->name,
-                'status' => (int)1,
-            ];
+            $vehicleBrand->name   = $request->name;
+            $vehicleBrand->status = $request->status;
 
             if (!empty($request->file('icon')))
-                $data['icon']  = singleFile($request->file('icon'), 'icon/');
+                $vehicleBrand->icon  = singleFile($request->file('icon'), 'icon/');
 
-            foreach ($data as $key => $res) {
-                $vehicleBrand->$key = $res;
-            }
-            //Vehicle Brand updated, return success response
-            if ($vehicleBrand->save()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Vehicle Brand updated successfully',
-                    'data' => $vehicleBrand
-                ], Response::HTTP_OK);
-            }
-            return response()->json([
-                'success' => false,
-                'message' => 'Vehicle Brand not Updated!',
-            ], 400);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ]);
-        }
+            if ($vehicleBrand->save())
+                return response(['status' => 'success', 'message' => 'Vehicle Brand updated Successfully!']);
+
+            return response(['status' => 'error', 'message' => 'Vehicle Brand not updated!']);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
+        } 
     }
-
 
     public function destroy(VehicleBrand $vehicleBrand)
     {
-        $vehicleBrand->delete();
+        if($vehicleBrand->delete())
+        return response(['status' => 'success', 'message' => 'Vehicle Brand deleted Successfully!']);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Vehicle Brand deleted successfully'
-        ], Response::HTTP_OK);
+         return response(['status' => 'error', 'message' => 'Vehicle Brand not deleted!']);
+      
     }
 }

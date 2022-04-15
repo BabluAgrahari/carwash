@@ -1,141 +1,81 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
-use App\Models\ShopOwner;
-use Illuminate\Http\Request;
-use App\Http\Requests\validation\Api\CreateShopRequest;
-use App\Http\Requests\validation\Api\UpdateShopRequest;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Admin\ShopOwner;
+use App\Http\Requests\validation\Admin\CreateShop;
+use App\Http\Requests\validation\Admin\UpdateShop;
+use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class shopOwnerController extends Controller
 {
-    protected $user;
-
-    public function __construct()
-    {
-        $this->user = JWTAuth::parseToken()->authenticate();
-    }
-
     public function index()
     {
-        return $this->user
-            ->shopOwners()
-            ->get();
+        try {
+            $list = ShopOwner::get();
+            return response(['status' => true, 'data' => $list]);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
+        }
     }
 
-
-    public function create()
-    {
-        //
-    }
-
-
-    public function store(CreateShopRequest $request)
+    public function store(CreateShop $request)
     {
         try {
-
-            //Request is valid, create new Shop Owner
             $shopOwner = new ShopOwner();
-            $data = [
-                'name'     => $request->name,
-                'email'    => $request->email,
-                'phone_no' => $request->phone_no,
-                'address'  => $request->address,
-                'user_id'  => $this->user->id,
-                'status'   => (int)1,
-            ];
+            $shopOwner->user_id  = Auth::user()->_id;
+            $shopOwner->name     = $request->name;
+            $shopOwner->email    = $request->email;
+            $shopOwner->phone_no = $request->phone_no;
+            $shopOwner->address  = $request->address;
+            $shopOwner->status   = $request->status;
 
-            foreach ($data as $key => $res) {
-                $shopOwner->$key = $res;
-            }
+            if ($shopOwner->save())
+                return response(['status' => 'success', 'message' => 'Shop Owner created successfully!']);
 
-            if ($shopOwner->save()) {
-                //Shop Owner created, return success response
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Shop Owner created successfully',
-                    'data' => $shopOwner
-                ], Response::HTTP_OK);
-            }
-            return response()->json([
-                'success' => false,
-                'message' => 'Shop Owner not Created!',
-            ], 400);
-        } catch (\Exception $e) {
-            return response(['status' => 'error', 'msg' => $e->getMessage()]);
+            return response(['status' => 'error', 'message' => 'Shop Owner not created Successfully!']);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
 
     public function show($id)
     {
-        $shopOwner = ShopOwner::find($id);
-
-        if (!$shopOwner) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, Shop Owner not found.'
-            ], 400);
+        try {
+            $list = ShopOwner::find($id);
+            return response(['status' => true, 'data' => $list]);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
-
-        return $shopOwner;
-    }
-
-    public function edit(ShopOwner $shopOwner)
-    {
-        //
     }
 
 
-    public function update(UpdateShopRequest  $request, $id)
+    public function update(UpdateShop  $request, $id)
     {
         try {
-            //Validate data
             $shopOwner = ShopOwner::find($id);
+            $shopOwner->name      = $request->name;
+            $shopOwner->email     = $request->email;
+            $shopOwner->phone_no  = $request->phone_no;
+            $shopOwner->address   = $request->address;
+            $shopOwner->status    = $request->status;
 
-            //Request is valid, update Shop Owner
-            $data = [
-                'name'     => $request->name,
-                'email'    => $request->email,
-                'phone_no' => $request->phone_no,
-                'address'  => $request->address,
-            ];
+            if ($shopOwner->save())
+                return response(['status' => 'success', 'message' => 'Shop Owner updated Successfully!']);
 
-            foreach ($data as $key => $res) {
-                $shopOwner->$key = $res;
-            }
-            //Shop Owner updated, return success response
-            if ($shopOwner->save()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Shop Owner updated successfully',
-                    'data' => $shopOwner
-                ], Response::HTTP_OK);
-            }
-            return response()->json([
-                'success' => false,
-                'message' => 'Shop Owner not Updated!',
-            ], 400);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ]);
+            return response(['status' => 'error', 'message' => 'Shop Owner not updated!']);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
-
 
     public function destroy(ShopOwner $ShopOwner)
     {
-        $ShopOwner->delete();
+        if ($ShopOwner->delete())
+            return response(['status' => 'success', 'message' => 'Shop Owner deleted Successfully!']);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Shop Owner deleted successfully'
-        ], Response::HTTP_OK);
+        return response(['status' => 'error', 'message' => 'Shop Owner not deleted!']);
     }
 }
