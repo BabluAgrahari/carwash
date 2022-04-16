@@ -19,14 +19,16 @@ class VehicleModelController extends Controller
                   return response(['status' => true, 'message' =>"no found any record."]);
 
 
-             $records = [];
+            $records = [];
             foreach($lists as $list){
             $records[] = [
              '_id'          =>$list->_id,
              'name'         =>$list->name,
              'vehicle_brand'=>$list->vehicleBrand['name'],
+             'vehicle_brand_id'=>$list->vehicle_brand,
              'status'       =>$list->isActive($list->status),
-             'created'      =>$list->createdAt($list->created),
+             'created'      =>$list->dFormat($list->created),
+             'updated'      =>$list->dFormat($list->updated)
              ];
              }
 
