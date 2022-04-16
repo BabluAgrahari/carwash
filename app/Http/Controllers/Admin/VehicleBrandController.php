@@ -14,8 +14,25 @@ class VehicleBrandController extends Controller
     public function index()
     {
         try {
-            $list = VehicleBrand::get();
-            return response(['status' => true, 'data' => $list]);
+            $lists = VehicleBrand::get();
+
+           if($lists->isEmpty())
+                  return response(['status' =>'error', 'message' =>"no found any record."]);
+
+            $records = [];
+            foreach($lists as $list){
+            $records[] = [
+             '_id'          =>$list->_id,
+             'user_id'      =>$list->user_id,
+             'name'         =>$list->name,
+             'icon'         =>asset('icon/'.$list->icon),
+             'status'       =>$list->isActive($list->status),
+             'created'      =>$list->dFormat($list->created),
+             'updated'      =>$list->dFormat($list->updated)
+             ];
+             }
+
+            return response(['status' =>'success', 'data' => $records]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }

@@ -35,6 +35,7 @@ class CreateVehicleBrand extends FormRequest
         // throw new HttpResponseException();
         throw new HttpResponseException(response()->json([
             'status' => 'error',
+            'type'   => "validation",
             'message' => $validator->errors(),
         ]));
     }

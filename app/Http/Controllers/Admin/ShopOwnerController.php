@@ -14,8 +14,26 @@ class shopOwnerController extends Controller
     public function index()
     {
         try {
-            $list = ShopOwner::get();
-            return response(['status' => true, 'data' => $list]);
+            $lists = ShopOwner::get();
+            if($lists->isEmpty())
+                  return response(['status' =>'error', 'message' =>"no found any record."]);
+
+
+            $records = [];
+            foreach($lists as $list){
+            $records[] = [
+             '_id'          =>$list->_id,
+             'name'         =>$list->name,
+             'email'        =>$list->email,
+             'phone_no'     =>$list->phone_no,
+             'address'      =>$list->address,   
+             'status'       =>$list->isActive($list->status),
+             'created'      =>$list->dFormat($list->created),
+             'updated'      =>$list->dFormat($list->updated)
+             ];
+             }
+
+            return response(['status' =>'success', 'data' => $records]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }

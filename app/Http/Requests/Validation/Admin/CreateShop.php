@@ -42,8 +42,9 @@ class CreateShop extends FormRequest
     {
         // throw new HttpResponseException();
         throw new HttpResponseException(response()->json([
-            'success' => false,
+            'success' =>'error',
+            'type'   => "validation",
             'message' => $validator->errors(),
-        ], 400));
+        ]));
     }
 }

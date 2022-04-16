@@ -52,8 +52,9 @@ class CreateService extends FormRequest
     {
         // throw new HttpResponseException();
         throw new HttpResponseException(response()->json([
-            'success' => false,
+            'status' => 'error',
+            'type'   => "validation",
             'message' => $validator->errors(),
-        ], 400));
+        ]));
     }
 }

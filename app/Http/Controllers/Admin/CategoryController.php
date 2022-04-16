@@ -7,14 +7,34 @@ use App\Models\Admin\Category;
 use App\Http\Requests\Validation\Admin\CreateCategory;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
     public function index()
     {
         try {
-            $list = Category::get();
-            return response(['status' => true, 'data' => $list]);
+            $lists = Category::get();
+
+           if($lists->isEmpty())
+                  return response(['status' =>'error', 'message' =>"no found any record."]);
+
+
+            $records = [];
+            foreach($lists as $list){
+            $records[] = [
+             '_id'          =>$list->_id,
+             'user_id'      =>$list->user_id,
+             'name'         =>$list->name,
+             'status'       =>$list->isActive($list->status),
+             'icon'         =>asset('icon/'.$list->icon),
+             'created'      =>$list->dFormat($list->created),
+             'updated'      =>$list->dFormat($list->updated)
+             ];
+             }
+
+            return response(['status' =>'success', 'data' => $records]);
+
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
@@ -28,6 +48,8 @@ class CategoryController extends Controller
             $category->user_id = Auth::user()->_id;
             $category->name = $request->name;
             $category->status = $request->status;
+
+// return response(['icon'=>$request->file('icon')]);die;
 
             if (!empty($request->file('icon')))
                 $category->icon  = singleFile($request->file('icon'), 'icon/');

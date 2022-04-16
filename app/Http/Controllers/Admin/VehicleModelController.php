@@ -16,7 +16,7 @@ class VehicleModelController extends Controller
             $lists = VehicleModel::get();
              
              if($lists->isEmpty())
-                  return response(['status' => true, 'message' =>"no found any record."]);
+                  return response(['status' =>'error', 'message' =>"no found any record."]);
 
 
             $records = [];
@@ -32,7 +32,7 @@ class VehicleModelController extends Controller
              ];
              }
 
-            return response(['status' => true, 'data' => $records]);
+            return response(['status' =>'success', 'data' => $records]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }

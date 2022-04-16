@@ -18,7 +18,7 @@ class CreateCategory extends FormRequest
     {
         return [
             'name' => 'required|string',
-            // 'icon' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'icon' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
     public function messages()
@@ -34,8 +34,9 @@ class CreateCategory extends FormRequest
     {
         // throw new HttpResponseException();
         throw new HttpResponseException(response()->json([
-            'success' => false,
+            'status' => "error",
+            'type'   => "validation",
             'message' => $validator->errors(),
-        ], 400));
+        ]));
     }
 }

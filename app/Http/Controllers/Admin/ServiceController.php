@@ -18,8 +18,39 @@ class ServiceController extends Controller
     public function index()
     {
         try {
-            $list = Service::get();
-            return response(['status' => true, 'data' => $list]);
+            $lists = Service::get();
+            if($lists->isEmpty())
+                  return response(['status' =>'error', 'message' =>"no found any record."]);
+
+
+            $records = [];
+            foreach($lists as $list){
+            $records[] = [
+             '_id'             =>$list->_id,
+             'user_id'         =>$list->_id,
+             'title'           =>$list->title,
+             'sort_description'=>$list->sort_description,
+             'description'     =>$list->description,
+             'time_duration'   =>$list->time_duration,
+             'service_charge'  =>$list->service_charge,
+             'discount'        =>$list->discount,
+             'gst_charges'     =>$list->gst_charges,
+             'vehicle_brand'   =>$list->vehicleBrand['name'],
+             'vehicle_brand_id'=>$list->vehicle_brand,
+             'category'        =>$list->cCategory['name'],
+             'category_id'     =>$list->category,
+             'vehicle_model'   =>$list->vehicleModel['name'],
+             'vehicle_model_id'=>$list->vehicle_model,
+             'service_type'    =>$list->service_type,
+             'vehicle_brand_id'=>$list->vehicle_brand,
+              'icon'           =>asset('icon/'.$list->icon),
+             'status'          =>$list->isActive($list->status),
+             'created'         =>$list->dFormat($list->created),
+             'updated'         =>$list->dFormat($list->updated)
+             ];
+             }
+
+            return response(['status' => 'success', 'data' => $records]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
