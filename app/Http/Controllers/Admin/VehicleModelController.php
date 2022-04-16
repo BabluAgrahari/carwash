@@ -16,7 +16,7 @@ class VehicleModelController extends Controller
             $lists = VehicleModel::get();
              
              if($lists->isEmpty())
-                  return response(['status' => true, 'message' =>"no found any recoed."]);
+                  return response(['status' => true, 'message' =>"no found any record."]);
 
              foreach($lists as $list){
             $records[] = [
