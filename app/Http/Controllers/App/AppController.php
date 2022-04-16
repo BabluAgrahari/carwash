@@ -26,8 +26,8 @@ class AppController extends Controller
             $records[] = [
              '_id'          =>$list->_id,
              'name'         =>$list->name,
-             'title        '=>$list->title,
-             'icon'         =>$list->icon,
+             'title'        =>$list->title,
+             'icon'         =>asset('icon/'.$list->icon),
              'created'      =>$list->dFormat($list->created),
              ];
              }
