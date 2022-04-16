@@ -34,8 +34,8 @@ class CreateVehicleModel extends FormRequest
     {
         // throw new HttpResponseException();
         throw new HttpResponseException(response()->json([
-            'success' => false,
+            'status' => 'error',
             'message' => $validator->errors(),
-        ], 400));
+        ]));
     }
 }

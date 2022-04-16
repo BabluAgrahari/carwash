@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\VehicleBrand;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\validation\Admin\CreateVehicleBrand;
+use Illuminate\Http\Request;
+use App\Http\Requests\Validation\Admin\CreateVehicleBrand;
 
 class VehicleBrandController extends Controller
 {
@@ -20,8 +21,12 @@ class VehicleBrandController extends Controller
         }
     }
 
-    public function store(CreateVehicleBrand $request)
+    public function store(Request $request)
     {
+        // echo "ddf";
+        // print_r($_POST);
+        // print_r($_FILES);
+        // die;
         try {
             $vehicleBrand = new VehicleBrand();
             $vehicleBrand->user_id = Auth::user()->_id;
