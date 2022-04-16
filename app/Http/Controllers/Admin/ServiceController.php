@@ -60,6 +60,9 @@ class ServiceController extends Controller
             $service->gst_charges       = $request->gst_charges;
             $service->status            = $request->status;
 
+            if (!empty($request->file('icon')))
+            $service->icon  = singleFile($request->file('icon'), 'icon/');
+            
             if (!empty($request->hasFile('multiple_images')))
                 $service->multiple_images = json_encode(multipleFile($request->file('multiple_images'), 'images'));
 
@@ -119,6 +122,10 @@ class ServiceController extends Controller
             $service->discount          = $request->discount;
             $service->gst_charges       = $request->gst_charges;
             $service->status            = $request->status;
+
+
+            if (!empty($request->file('icon')))
+            $service->icon  = singleFile($request->file('icon'), 'icon/');
 
             if (!empty($request->hasFile('multiple_images')))
                 $service->multiple_images = json_encode(multipleFile($request->file('multiple_images'), 'images'));
