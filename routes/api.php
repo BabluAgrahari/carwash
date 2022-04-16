@@ -43,7 +43,9 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 });
 
 //for mobile application
-Route::get('service', [Apps::class, 'index']);
+Route::get('service', [Apps::class, 'getServices']);
+Route::post('send-otp', [Apps::class, 'sendOtp']);
+Route::post('verify-otp', [Apps::class, 'verifyOtp']);
 
 
 Route::any('{any}', function () {
