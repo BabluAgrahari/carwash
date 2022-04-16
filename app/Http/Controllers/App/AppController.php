@@ -19,7 +19,7 @@ class AppController extends Controller
             $lists = Service::get();
              
              if($lists->isEmpty())
-                  return response(['status' => true, 'message' =>"no record found ."]);
+                  return response(['status' => true, 'message' =>"no record found."]);
 
             $records = [];
             foreach($lists as $list){
