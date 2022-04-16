@@ -19,4 +19,15 @@ class BaseModel extends Model
 
         self::observe(\App\Observers\AttachTimeStamp::class);
     }
+
+     public function createdAt($created){
+
+     return date('d M Y',$created);
+    }
+
+    public function isActive($status){
+
+     return ($status)?'Active':'Inactive';
+    }
+
 }

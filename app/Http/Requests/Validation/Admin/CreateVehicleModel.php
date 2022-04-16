@@ -17,8 +17,8 @@ class CreateVehicleModel extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
-            'brand_id' => 'required',
+            'name' => 'required|string|min:2|max:255',
+            'vehicle_brand' => 'required',
         ];
     }
     public function messages()

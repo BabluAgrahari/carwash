@@ -17,4 +17,11 @@ class VehicleModel extends BaseModel
      protected $fillable = [
          'name', 'brand_id','created_at','updated_at',
      ];
+
+     function vehicleBrand(){
+
+     	return $this->hasOne('App\Models\Admin\VehicleBrand','_id','vehicle_brand')->select('name');
+     }
+
+   
 }

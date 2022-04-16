@@ -6,15 +6,29 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\VehicleModel;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\validation\Admin\CreateVehicleModel;
+use App\Http\Requests\Validation\Admin\CreateVehicleModel;
 
 class VehicleModelController extends Controller
 {
     public function index()
     {
         try {
-            $list = VehicleModel::get();
-            return response(['status' => true, 'data' => $list]);
+            $lists = VehicleModel::get();
+             
+             if($lists->isEmpty())
+                  return response(['status' => true, 'message' =>"no found any recoed."]);
+
+             foreach($lists as $list){
+            $records[] = [
+             '_id'          =>$list->_id,
+             'name'         =>$list->name,
+             'vehicle_brand'=>$list->vehicleBrand['name'],
+             'status'       =>$list->isActive($list->status),
+             'created'      =>$list->createdAt($list->created),
+             ];
+             }
+
+            return response(['status' => true, 'data' => $records]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
@@ -28,7 +42,7 @@ class VehicleModelController extends Controller
             $vehicleModel = new VehicleModel();
             $vehicleModel->user_id  = Auth::user()->_id;
             $vehicleModel->name     = $request->name;
-            $vehicleModel->brand_id = $request->brand_id;
+            $vehicleModel->vehicle_brand = $request->vehicle_brand;
             $vehicleModel->status   = $request->status;
 
             if (!empty($request->file('icon')))
@@ -58,7 +72,7 @@ class VehicleModelController extends Controller
         try {
             $vehicleModel = VehicleModel::find($id);
             $vehicleModel->name     = $request->name;
-            $vehicleModel->brand_id = $request->brand_id;
+            $vehicleModel->vehicle_brand = $request->vehicle_brand;
             $vehicleModel->status   = $request->status;
 
             if (!empty($request->file('icon')))
