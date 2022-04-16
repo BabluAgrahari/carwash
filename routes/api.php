@@ -38,7 +38,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::resource('vehicle-modal', VehicleModelController::class);
 
     Route::resource('services', ServiceController::class);
-    Route::resource('shopOwner', ShopOwnerController::class);
+    Route::resource('shop-owner', ShopOwnerController::class);
 
 });
 
