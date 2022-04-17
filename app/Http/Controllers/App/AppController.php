@@ -166,7 +166,7 @@ class AppController extends Controller
         if ($success == 'otp_expired') {
             return response(['status' => 'error', 'message' => 'Otp Expired!']);
         } elseif ($success) {
-            return response(['status' => 'success', 'message' => 'OTP verified successful!']);
+            return response(['status' => 'success', 'message' => 'OTP verified successfully!']);
         }
     }
 
