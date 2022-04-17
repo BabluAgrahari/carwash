@@ -81,38 +81,38 @@ class AppController extends Controller
             $data['otpDateTime'] = time();
             $data['countryCode'] = 91;
             // SEND OTP-q
-            $apiKey = urlencode('');
-            $messages = "Your verification otp is " . $data['otp'];
-            $sender = urlencode('');
-            $mobilenumbers = "+" . $data['countryCode'] . $data['phone_no'];
-            $url  = "https://api.textlocal.in/send/";
+            // $apiKey = urlencode('');
+            // $messages = "Your verification otp is " . $data['otp'];
+            // $sender = urlencode('');
+            // $mobilenumbers = "+" . $data['countryCode'] . $data['phone_no'];
+            // $url  = "https://api.textlocal.in/send/";
 
-            $message1 = urlencode($messages);
-            $postdata = array('apikey' => $apiKey, 'numbers' => $mobilenumbers, "sender" => $sender, "message" => $message1);
+            // $message1 = urlencode($messages);
+            // $postdata = array('apikey' => $apiKey, 'numbers' => $mobilenumbers, "sender" => $sender, "message" => $message1);
 
-            $ch = curl_init();
-            if (!$ch) {
-                die("Couldn't initialize a cURL handle");
-            }
-            $ret = curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
-            $ret = curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            // $ch = curl_init();
+            // if (!$ch) {
+            //     die("Couldn't initialize a cURL handle");
+            // }
+            // $ret = curl_setopt($ch, CURLOPT_URL, $url);
+            // curl_setopt($ch, CURLOPT_POST, 1);
+            // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+            // curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
+            // $ret = curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-            $curlresponse = curl_exec($ch); // execute
+            // $curlresponse = curl_exec($ch); // execute
 
-            if (curl_errno($ch))
-                echo 'curl error : ' . curl_error($ch);
-            if (empty($ret)) {
-                // some kind of an error happened
-                die(curl_error($ch));
-                curl_close($ch); // close cURL handler
-            } else {
-                $info = curl_getinfo($ch);
-                curl_close($ch);
-            }
+            // if (curl_errno($ch))
+            //     echo 'curl error : ' . curl_error($ch);
+            // if (empty($ret)) {
+            //     // some kind of an error happened
+            //     die(curl_error($ch));
+            //     curl_close($ch); // close cURL handler
+            // } else {
+            //     $info = curl_getinfo($ch);
+            //     curl_close($ch);
+            // }
 
             $User_otp = UserOtp::Select('_id')->where('phone_no', $data['phone_no'])->first();
 
