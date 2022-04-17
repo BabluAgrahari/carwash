@@ -51,7 +51,7 @@ class AppController extends Controller
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->messages()], 422);
             }
-            $usersDetails = User::select('phone_no', $credentials['phone_no'])->where('_id', Auth::user()->_id)->first();
+            $usersDetails = User::select('phone_no', $credentials['phone_no'])->first();
             if (empty($usersDetails)) {
                 $user = User::create([
                     'phone_no'     => $credentials['phone_no'],
@@ -73,7 +73,7 @@ class AppController extends Controller
     public function send_otp($data)
     {
         $message = array();
-        $usersDetails = User::where('phone_no', $data['phone_no'])->where('_id', Auth::user()->_id)->first();
+        $usersDetails = User::where('phone_no', $data['phone_no'])->first();
 
         if (!empty($usersDetails)) {
 
@@ -114,7 +114,7 @@ class AppController extends Controller
                 curl_close($ch);
             }
 
-            $User_otp = UserOtp::Select('_id')->where('phone_no', $data['phone_no'])->where('user_id', Auth::user()->_id)->first();
+            $User_otp = UserOtp::Select('_id')->where('phone_no', $data['phone_no'])->first();
 
             $d['otp']           = $data['otp'];
             $d['otp_date_time'] = $data['otp_date_time'];
@@ -158,7 +158,7 @@ class AppController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->messages()], 422);
         }
-        $usersDetails = User::where('phone_no', $credentials['phone_no'])->where('_id', Auth::user()->_id)->first();
+        $usersDetails = UserOtp::where('phone_no', $credentials['phone_no'])->where('otp', $credentials['otp'])->first();;
         if (empty($usersDetails)) {
             return response(['status' => 'error', 'message' => 'Invalid phone number or OTP']);
         }
@@ -172,7 +172,7 @@ class AppController extends Controller
 
     public function verify_otp($data)
     {
-        $otp = UserOtp::where('phone_no', $data['phone_no'])->where('otp', $data['otp'])->where('user_id', Auth::user()->_id)->first();
+        $otp = UserOtp::where('phone_no', $data['phone_no'])->where('otp', $data['otp'])->first();
 
         if (!empty($otp)) {
             $currentTime = time();
