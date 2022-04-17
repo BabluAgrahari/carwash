@@ -18,7 +18,7 @@ class CreateVehicleBrand extends FormRequest
     {
         return [
             'name' => 'required|string',
-          //  'icon' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+           // 'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
     public function messages()

@@ -14,7 +14,7 @@ class VehicleBrandController extends Controller
     public function index()
     {
         try {
-            $lists = VehicleBrand::get();
+            $lists = VehicleBrand::desc()->get();
 
            if($lists->isEmpty())
                   return response(['status' =>'error', 'message' =>"no found any record."]);
@@ -25,7 +25,7 @@ class VehicleBrandController extends Controller
              '_id'          =>$list->_id,
              'user_id'      =>$list->user_id,
              'name'         =>$list->name,
-             'icon'         =>asset('icon/'.$list->icon),
+             'icon'         =>(!empty($list->icon))?asset('icon/'.$list->icon):'',
              'status'       =>$list->isActive($list->status),
              'created'      =>$list->dFormat($list->created),
              'updated'      =>$list->dFormat($list->updated)
@@ -40,10 +40,7 @@ class VehicleBrandController extends Controller
 
     public function store(Request $request)
     {
-        // echo "ddf";
-        // print_r($_POST);
-        // print_r($_FILES);
-        // die;
+       
         try {
             $vehicleBrand = new VehicleBrand();
             $vehicleBrand->user_id = Auth::user()->_id;
@@ -66,7 +63,15 @@ class VehicleBrandController extends Controller
     {
         try {
             $list = VehicleBrand::find($id);
-            return response(['status' => true, 'data' => $list]);
+             $record = [
+              'name'   =>$list->name,
+              'status' =>$list->status,
+              'icon'   =>(!empty($list->icon))?asset('icon/'.$list->icon):'',
+              'created'=>$list->dFormat($list->created),
+              'updated'=>$list->dFormat($list->updated)
+            ];
+          
+            return response(['status' =>'success', 'data' => $record]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }

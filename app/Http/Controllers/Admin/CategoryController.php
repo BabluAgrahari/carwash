@@ -14,7 +14,7 @@ class CategoryController extends Controller
     public function index()
     {
         try {
-            $lists = Category::get();
+            $lists = Category::desc()->get();
 
            if($lists->isEmpty())
                   return response(['status' =>'error', 'message' =>"no found any record."]);
@@ -27,7 +27,7 @@ class CategoryController extends Controller
              'user_id'      =>$list->user_id,
              'name'         =>$list->name,
              'status'       =>$list->isActive($list->status),
-             'icon'         =>asset('icon/'.$list->icon),
+             'icon'         =>(!empty($list->icon))?asset('icon/'.$list->icon):'',
              'created'      =>$list->dFormat($list->created),
              'updated'      =>$list->dFormat($list->updated)
              ];
@@ -49,8 +49,6 @@ class CategoryController extends Controller
             $category->name = $request->name;
             $category->status = $request->status;
 
-// return response(['icon'=>$request->file('icon')]);die;
-
             if (!empty($request->file('icon')))
                 $category->icon  = singleFile($request->file('icon'), 'icon/');
 
@@ -68,16 +66,24 @@ class CategoryController extends Controller
     {
         try {
             $list = Category::find($id);
-            return response(['status' => true, 'data' => $list]);
+            $record = [
+              'name'   =>$list->name,
+              'status' =>$list->status,
+              'icon'   =>(!empty($list->icon))?asset('icon/'.$list->icon):'',
+              'created'=>$list->dFormat($list->created),
+              'updated'=>$list->dFormat($list->updated)
+            ];
+            return response(['status' => true, 'data' => $record]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
 
-    public function update(CreateCategory  $request, $id)
+    public function update(CreateCategory $request, $id)
     {
         try {
             $category = Category::find($id);
+
             $category->name = $request->name;
             $category->status = $request->status;
 

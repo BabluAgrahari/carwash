@@ -20,6 +20,12 @@ class BaseModel extends Model
         self::observe(\App\Observers\AttachTimeStamp::class);
     }
 
+
+    public function scopeDesc($query){
+
+        return $query->orderBy('created','DESC');
+    }
+
      public function dFormat($date){
 
 	if(empty($date))

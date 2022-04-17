@@ -13,7 +13,7 @@ class VehicleModelController extends Controller
     public function index()
     {
         try {
-            $lists = VehicleModel::get();
+            $lists = VehicleModel::desc()->get();
              
              if($lists->isEmpty())
                   return response(['status' =>'error', 'message' =>"no found any record."]);
