@@ -78,7 +78,7 @@ class AppController extends Controller
         if (!empty($usersDetails)) {
 
             $data['otp'] = rand(111111, 999999);
-            $data['otpDateTime'] = time();
+            $data['otp_date_time'] = time();
             $data['countryCode'] = 91;
             // SEND OTP-q
             // $apiKey = urlencode('');
@@ -130,7 +130,7 @@ class AppController extends Controller
                 $User_otp->otp           = $data['otp'];
                 $User_otp->otp_date_time = $data['otp_date_time'];
                 $User_otp->phone_no      = $data['phone_no'];
-                $User_otp->user_id       = $usersDetails->_id;
+              //  $User_otp->user_id       = $usersDetails->_id;
 
                 array_push($message, "OTP sent successfully");
             }
