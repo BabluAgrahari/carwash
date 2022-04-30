@@ -18,7 +18,7 @@ class ServiceController extends Controller
     public function index()
     {
         try {
-            $lists = Service::get();
+            $lists = Service::desc()->get();
             if($lists->isEmpty())
                   return response(['status' =>'error', 'message' =>"no found any record."]);
 
@@ -35,15 +35,15 @@ class ServiceController extends Controller
              'service_charge'  =>$list->service_charge,
              'discount'        =>$list->discount,
              'gst_charges'     =>$list->gst_charges,
-             'vehicle_brand'   =>$list->vehicleBrand['name'],
+             'vehicle_brand'   =>!empty($list->vehicleBrand['name'])?$list->vehicleBrand['name']:'',
              'vehicle_brand_id'=>$list->vehicle_brand,
-             'category'        =>$list->cCategory['name'],
+             'category'        =>!empty($list->cCategory['name'])?$list->cCategory['name']:'',
              'category_id'     =>$list->category,
-             'vehicle_model'   =>$list->vehicleModel['name'],
+             'vehicle_model'   =>!empty($list->vehicleModel['name'])?$list->vehicleModel['name']:'',
              'vehicle_model_id'=>$list->vehicle_model,
              'service_type'    =>$list->service_type,
              'vehicle_brand_id'=>$list->vehicle_brand,
-              'icon'           =>asset('icon/'.$list->icon),
+              'icon'           =>!empty($list->icon)?asset('services/'.$list->icon):'',
              'status'          =>$list->isActive($list->status),
              'created'         =>$list->dFormat($list->created),
              'updated'         =>$list->dFormat($list->updated)
@@ -92,10 +92,10 @@ class ServiceController extends Controller
             $service->status            = $request->status;
 
             if (!empty($request->file('icon')))
-            $service->icon  = singleFile($request->file('icon'), 'icon/');
+            $service->icon  = singleFile($request->file('icon'), 'services/');
             
             if (!empty($request->hasFile('multiple_images')))
-                $service->multiple_images = json_encode(multipleFile($request->file('multiple_images'), 'images'));
+                $service->multiple_images = json_encode(multipleFile($request->file('multiple_images'), 'services'));
 
             if (!empty($request->hasFile('video'))) {
                 $path = $request->file('video')->store('videos', ['disk' =>      'my_files']);
