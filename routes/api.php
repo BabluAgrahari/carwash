@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\LoginController;
 
 
 use App\Http\Controllers\App\AppController as Apps;
+use App\Http\Controllers\App\HomeController;
 use App\Http\Controllers\App\LoginController as Login;
 
 
@@ -35,10 +36,12 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
 //for mobile application
 Route::post('send-otp', [Login::class, 'sendOtp']);
-Route::post('verify-otp', [Apps::class, 'verifyOtp']);
-Route::post('resend-otp', [Apps::class, 'resendOtp']);
-Route::get('service', [Apps::class, 'getServices']);
+Route::post('verify-otp', [Login::class, 'verifyOtp']);
+Route::post('resend-otp', [Login::class, 'resendOtp']);
 
+Route::group(['prefix' => 'app', 'middleware' => 'appAuth'], function () {
+    Route::get('service', [HomeController::class, 'serviceList']);
+});
 
 
 Route::any('{any}', function () {

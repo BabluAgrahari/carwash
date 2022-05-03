@@ -11,7 +11,7 @@ use Exception;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class HomeController extends AppController
 {
     public function serviceList()
     {
@@ -36,10 +36,6 @@ class HomeController extends Controller
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
-
-
-    // public function
-
 
     public function vendorList()
     {

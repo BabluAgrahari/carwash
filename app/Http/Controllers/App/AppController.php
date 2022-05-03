@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\AppAuthTraits;
 use App\Models\Admin\Service;
 use App\Models\Admin\UserOtp;
 use App\Models\User;
@@ -13,11 +14,13 @@ use Illuminate\Support\Facades\Auth;
 
 class AppController extends Controller
 {
+    use AppAuthTraits;
+
     public function getServices()
     {
         try {
             $lists = Service::where('status',1)->get();
-             
+
              // if($lists->isEmpty())
                   return response(['status' =>'error', 'message' =>"no record found."]);
 
@@ -75,7 +78,7 @@ class AppController extends Controller
 
     public function send_otp($data)
     {
-    
+
         $message = array();
         // $usersDetails = User::where('phone_no', $phone_no)->first();
 

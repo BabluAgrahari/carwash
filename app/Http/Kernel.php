@@ -59,10 +59,7 @@ class Kernel extends HttpKernel
         'retailer'  => \App\Http\Middleware\RetailerMiddleware::class,
         'adminRedirect' => \App\Http\Middleware\RedirectAdmin::class,
         'retailerRedirect' => \App\Http\Middleware\RedirectRetailer::class,
-        'employee' => \App\Http\Middleware\EmployeeMiddleware::class,
-        'employeeRedirect' => \App\Http\Middleware\RedirectEmployee::class,
-        'distributor' => \App\Http\Middleware\DistributorMiddleware::class,
-        'distributorRedirect' => \App\Http\Middleware\RedirectDistributor::class,
+        'appAuth' => \App\Http\Middleware\AppAuth::class,
 
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
