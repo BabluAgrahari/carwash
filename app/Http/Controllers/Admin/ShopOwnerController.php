@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\ShopOwner;
+use App\Models\Admin\Service;
 use App\Http\Requests\validation\Admin\CreateShop;
 use App\Http\Requests\validation\Admin\UpdateShop;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class shopOwnerController extends Controller
 {
@@ -16,35 +19,35 @@ class shopOwnerController extends Controller
     {
         try {
             $lists = ShopOwner::desc()->get();
-            if($lists->isEmpty())
-                  return response(['status' =>'error', 'message' =>"no found any record."]);
+            if ($lists->isEmpty())
+                return response(['status' => 'error', 'message' => "no found any record."]);
 
 
             $records = [];
-            foreach($lists as $list){
-            $records[] = [
-             '_id'              =>$list->_id,
-             'business_name'    =>$list->business_name,
-             'business_email'   =>$list->business_email,
-             'mobile'           =>$list->mobile,
-             'phone'            =>$list->phone,
-             'city'             =>$list->city,
-             'pincode'          =>$list->pincode,
-             'country'          =>$list->country,
-             'state'            =>$list->state,
-             'gstin_no'         =>$list->gstin_no,
-             'address'          =>$list->address,
-             'description'      =>$list->description,
-             'store_status'     =>$list->store_status,
-             'verified_store'   =>$list->verified_store,
-             'whatsapp_no'      =>$list->whatsapp_no,
-             'bank_details'     =>$list->bank_details,
-             'created'          =>$list->dFormat($list->created),
-             'updated'          =>$list->dFormat($list->updated)
-             ];
-             }
+            foreach ($lists as $list) {
+                $records[] = [
+                    '_id'              => $list->_id,
+                    'business_name'    => $list->business_name,
+                    'business_email'   => $list->business_email,
+                    'mobile'           => $list->mobile,
+                    'phone'            => $list->phone,
+                    'city'             => $list->city,
+                    'pincode'          => $list->pincode,
+                    'country'          => $list->country,
+                    'state'            => $list->state,
+                    'gstin_no'         => $list->gstin_no,
+                    'address'          => $list->address,
+                    'description'      => $list->description,
+                    'store_status'     => $list->store_status,
+                    'verified_store'   => $list->verified_store,
+                    'whatsapp_no'      => $list->whatsapp_no,
+                    'bank_details'     => $list->bank_details,
+                    'created'          => $list->dFormat($list->created),
+                    'updated'          => $list->dFormat($list->updated)
+                ];
+            }
 
-            return response(['status' =>'success', 'data' => $records]);
+            return response(['status' => 'success', 'data' => $records]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
@@ -53,7 +56,7 @@ class shopOwnerController extends Controller
     public function store(Request $request)
     {
         try {
-             
+
             $shopOwner = new ShopOwner();
             $shopOwner->user_id        = Auth::user()->_id;
             $shopOwner->business_name  = $request->business_name;
@@ -73,16 +76,33 @@ class shopOwnerController extends Controller
             $shopOwner->bank_details   = json_decode($request->bank_details);
 
             if (!empty($request->file('logo')))
-            $shopOwner->logo  = singleFile($request->file('logo'), 'shop/');
+                $shopOwner->logo  = singleFile($request->file('logo'), 'shop/');
 
             if (!empty($request->file('cover_photo')))
-            $shopOwner->cover_photo  = singleFile($request->file('cover_photo'), 'shop/');
+                $shopOwner->cover_photo  = singleFile($request->file('cover_photo'), 'shop/');
 
 
-            if ($shopOwner->save())
-                return response(['status' => 'success', 'message' => 'Shop Owner created successfully!']);
+            if (!$shopOwner->save())
+                return response(['status' => 'error', 'message' => 'Shop Owner not created Successfully!']);
 
-            return response(['status' => 'error', 'message' => 'Shop Owner not created Successfully!']);
+            $this->createUser($request, $shopOwner->_id);
+            return response(['status' => 'success', 'message' => 'Shop Owner created successfully!']);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+
+    private function createUser($request, $id)
+    {
+        try {
+            $user = new User();
+            $user->name = $request->business_name;
+            $user->email = $request->business_email;
+            $user->password = Hash::make($request->password);
+            $user->role = 'vendor';
+            $user->vendor_id = $id;
+            $user->save();
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
@@ -93,23 +113,23 @@ class shopOwnerController extends Controller
         try {
             $list = ShopOwner::find($id);
             $record = [
-             '_id'              =>$list->_id,
-             'business_name'    =>$list->business_name,
-             'business_email'   =>$list->business_email,
-             'mobile'           =>$list->mobile,
-             'phone'            =>$list->phone,
-             'city'             =>$list->city,
-             'pincode'          =>$list->pincode,
-             'country'          =>$list->country,
-             'state'            =>$list->state,
-             'gstin_no'         =>$list->gstin_no,
-             'address'          =>$list->address,
-             'description'      =>$list->description,
-             'store_status'     =>$list->store_status,
-             'verified_store'   =>$list->verified_store,
-             'whatsapp_no'      =>$list->whatsapp_no,
-             'bank_details'     =>$list->bank_details
-         ];
+                '_id'              => $list->_id,
+                'business_name'    => $list->business_name,
+                'business_email'   => $list->business_email,
+                'mobile'           => $list->mobile,
+                'phone'            => $list->phone,
+                'city'             => $list->city,
+                'pincode'          => $list->pincode,
+                'country'          => $list->country,
+                'state'            => $list->state,
+                'gstin_no'         => $list->gstin_no,
+                'address'          => $list->address,
+                'description'      => $list->description,
+                'store_status'     => $list->store_status,
+                'verified_store'   => $list->verified_store,
+                'whatsapp_no'      => $list->whatsapp_no,
+                'bank_details'     => $list->bank_details
+            ];
             return response(['status' => true, 'data' => $record]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
@@ -138,11 +158,11 @@ class shopOwnerController extends Controller
             $shopOwner->bank_details   = json_decode($request->bank_details);
 
             if (!empty($request->file('logo')))
-            $shopOwner->logo  = singleFile($request->file('logo'), 'shop/');
+                $shopOwner->logo  = singleFile($request->file('logo'), 'shop/');
 
             if (!empty($request->file('cover_photo')))
-            $shopOwner->cover_photo  = singleFile($request->file('cover_photo'), 'shop/');
-        
+                $shopOwner->cover_photo  = singleFile($request->file('cover_photo'), 'shop/');
+
             if ($shopOwner->save())
                 return response(['status' => 'success', 'message' => 'Shop Owner updated Successfully!']);
 
@@ -158,5 +178,28 @@ class shopOwnerController extends Controller
             return response(['status' => 'success', 'message' => 'Shop Owner deleted Successfully!']);
 
         return response(['status' => 'error', 'message' => 'Shop Owner not deleted!']);
+    }
+
+
+    public function assignServices(Request $request, $id)
+    {
+        $services   = $request->services;
+        $shopOwner = ShopOwner::find($id);
+        $shopOwner->services = $services;
+
+        if (!$shopOwner->save())
+            return response(['status' => 'error', 'message' => 'Services not Assigned']);
+
+        foreach ($services as $service) {
+            $service = Service::find($service);
+            $serviceArr = [];
+            if (!empty($service->shop_owner))
+                $serviceArr= $service->shop_owner;
+            $serviceArr[] = $id;
+            $service->shop_owner = $serviceArr;
+            $service->save();
+        }
+
+        return response(['status' => 'success', 'message' => 'Services assigned Successfully!']);
     }
 }

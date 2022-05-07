@@ -17,7 +17,7 @@ class LoginController extends AppController
 
     public function sendOtp(Request $request)
     {
-   echo $this->AppAuth('_id');
+
         try {
             $credentials = $request->only('phone_no');
             //valid credential
@@ -28,7 +28,6 @@ class LoginController extends AppController
             if ($validator->fails()) {
                 return response()->json(['success' => 'error', 'message' => $validator->messages()]);
             }
-            $usersDetails = User::select('phone_no', $credentials['phone_no'])->first();
 
             $success = $this->send_otp($credentials);
             if ($success) {
@@ -148,5 +147,10 @@ class LoginController extends AppController
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
+    }
+
+    public function logoOut(){
+
+
     }
 }

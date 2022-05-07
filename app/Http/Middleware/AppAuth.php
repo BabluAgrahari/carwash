@@ -30,7 +30,7 @@ class AppAuth
                 return response()->json(['status' => FALSE, 'message' => 'Invalid token!']);
             }
         } else {
-            return response()->json(['status' => FALSE, 'message' => 'Invalid token!']);
+            return response()->json(['status' => FALSE, 'message' => 'Token is Required!']);
         }
     }
 }

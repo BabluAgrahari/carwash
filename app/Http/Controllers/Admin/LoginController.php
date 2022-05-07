@@ -1,11 +1,16 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use App\Http\Request\Validation\Admin\LoginRequest;
 use Exception;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
+
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 // use Tymon\JWTAuth\JWTAuth;
 class LoginController extends Controller
@@ -26,44 +31,47 @@ class LoginController extends Controller
                 'status' => false,
                 'message' => 'Could not create token.',
             ], 500);
-
         }
-
-
-
         //Token created, return with success response and jwt token
-
         return $this->createNewToken($token);
-
     }
-
 
 
     protected function createNewToken($token)
-
     {
-        $user['name'] = auth()->user()->full_name;
-
+        $user['name']  = auth()->user()->name;
         $user['email'] = auth()->user()->email;
-
-
+        $user['role']  = auth()->user()->role;
 
         return response()->json([
-
             'status' => true,
-
             'access_token' => $token,
-
             'token_type' => 'bearer',
-
             'expires_in' => auth('api')->factory()->getTTL() * 60,
-
             'user' => $user
-
         ]);
-
     }
 
 
+    public function register(Request $request)
+    {
+        $data = $request->all();
+        $check = $this->create($data);
 
+        return response()->json([
+            'status' => true,
+            'message' => 'register.',
+        ], 200);
+    }
+
+
+    public function create(array $data)
+    {
+        return User::create([
+            'fname'      => $data['name'],
+            'email'     => $data['email'],
+            'role'      =>  'admin',
+            'password'  => Hash::make($data['password'])
+        ]);
+    }
 }

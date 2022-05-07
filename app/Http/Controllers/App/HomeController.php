@@ -16,7 +16,7 @@ class HomeController extends AppController
     public function serviceList()
     {
         try {
-            $lists = Service::where('status',1)->get();
+            $lists = Service::where('status','1')->get();
 
              if($lists->isEmpty())
                 return response(['status' =>'error', 'message' =>"no record found."]);
@@ -40,7 +40,7 @@ class HomeController extends AppController
     public function vendorList()
     {
         try {
-            $lists = ShopOwner::where('status',1)->get();
+            $lists = ShopOwner::get();
 
              if($lists->isEmpty())
                 return response(['status' =>'error', 'message' =>"no record found."]);
