@@ -33,6 +33,8 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::resource('vehicle-modal', VehicleModelController::class);
 
     Route::resource('services', ServiceController::class);
+    Route::get('vendor-services',[ServiceController::class,'vendorServices']);
+
     Route::resource('shop-owner', ShopOwnerController::class);
     Route::post('assign-services/{id}', [ShopOwnerController::class, 'assignServices']);
 

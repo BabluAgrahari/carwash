@@ -64,17 +64,17 @@ class ServiceController extends Controller
 
             if (empty($category))
                 return response(['status' => 'error', 'message' => 'Invalid Category!']);
-            
+
             $vehicleBrand = VehicleBrand::where('user_id', Auth::user()->_id)->where('_id', $request->vehicle_brand)->first();
 
-            if (empty($vehicleBrand)) 
+            if (empty($vehicleBrand))
                 return response(['status' => 'error', 'message' => 'Invalid Vehicle Brand!']);
-            
+
             $vehicleModel = VehicleModel::where('user_id', Auth::user()->_id)->where('_id', $request->vehicle_model)->first();
 
-            if (empty($vehicleModel)) 
+            if (empty($vehicleModel))
                 return response(['status' => 'error', 'message' => 'Invalid Vehicle Model!']);
-            
+
 
             $service = new Service();
             $service->user_id  = Auth::user()->_id;
@@ -93,7 +93,7 @@ class ServiceController extends Controller
 
             if (!empty($request->file('icon')))
             $service->icon  = singleFile($request->file('icon'), 'services/');
-            
+
             if (!empty($request->hasFile('multiple_images')))
                 $service->multiple_images = json_encode(multipleFile($request->file('multiple_images'), 'services'));
 
@@ -181,5 +181,53 @@ class ServiceController extends Controller
         return response(['status' => 'success', 'message' => 'Service deleted Successfully!']);
 
          return response(['status' => 'error', 'message' => 'Service not deleted!']);
+    }
+
+
+
+    public function vendorServices(){
+
+       try {
+            $query = Service::desc();
+             $_id = Auth::user()->vendor_id;
+            $query->where(function($q) use ($_id){
+                $q->where('shop_owner','all',[$_id]);
+            });
+            $lists = $query->get();
+            if($lists->isEmpty())
+                  return response(['status' =>'error', 'message' =>"no found any record."]);
+
+
+            $records = [];
+            foreach($lists as $list){
+            $records[] = [
+             '_id'             =>$list->_id,
+             'user_id'         =>$list->_id,
+             'title'           =>$list->title,
+             'sort_description'=>$list->sort_description,
+             'description'     =>$list->description,
+             'time_duration'   =>$list->time_duration,
+             'service_charge'  =>$list->service_charge,
+             'discount'        =>$list->discount,
+             'gst_charges'     =>$list->gst_charges,
+             'vehicle_brand'   =>!empty($list->vehicleBrand['name'])?$list->vehicleBrand['name']:'',
+             'vehicle_brand_id'=>$list->vehicle_brand,
+             'category'        =>!empty($list->cCategory['name'])?$list->cCategory['name']:'',
+             'category_id'     =>$list->category,
+             'vehicle_model'   =>!empty($list->vehicleModel['name'])?$list->vehicleModel['name']:'',
+             'vehicle_model_id'=>$list->vehicle_model,
+             'service_type'    =>$list->service_type,
+             'vehicle_brand_id'=>$list->vehicle_brand,
+              'icon'           =>!empty($list->icon)?asset('services/'.$list->icon):'',
+             'status'          =>$list->isActive($list->status),
+             'created'         =>$list->dFormat($list->created),
+             'updated'         =>$list->dFormat($list->updated)
+             ];
+             }
+
+            return response(['status' => 'success', 'data' => $records]);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
+        }
     }
 }

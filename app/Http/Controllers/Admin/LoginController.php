@@ -55,8 +55,12 @@ class LoginController extends Controller
 
     public function register(Request $request)
     {
-        $data = $request->all();
-        $check = $this->create($data);
+       $user = new User();
+       $user->name = $request->name;
+       $user->email = $request->email;
+       $user->role  = 'admin';
+       $user->password = Hash::make($request->password);
+       $user->save();
 
         return response()->json([
             'status' => true,
@@ -68,7 +72,7 @@ class LoginController extends Controller
     public function create(array $data)
     {
         return User::create([
-            'fname'      => $data['name'],
+            'name'      => $data['name'],
             'email'     => $data['email'],
             'role'      =>  'admin',
             'password'  => Hash::make($data['password'])

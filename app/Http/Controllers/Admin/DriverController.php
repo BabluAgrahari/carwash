@@ -26,7 +26,7 @@ class DriverController extends Controller
             foreach ($lists as $list) {
                 $records[] = [
                     '_id'     => $list->_id,
-                    'vendor_id' => $list->vendor_id,
+                    'vendor_id'=> $list->vendor_id,
                     'name'    => $list->name,
                     'email'   => $list->email,
                     'phone'   => $list->phone,
@@ -35,7 +35,7 @@ class DriverController extends Controller
                     'pincode' => $list->pincode,
                     'address' => $list->address,
                     'status'  => $list->isActive($list->status),
-                    'image'   => (!empty($list->iamge)) ? asset('profile/' . $list->iamge) : '',
+                    'image'   => (!empty($list->image)) ? asset('profile/' . $list->image) : '',
                     'created' => $list->dFormat($list->created),
                     'updated' => $list->dFormat($list->updated)
                 ];
