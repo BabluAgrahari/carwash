@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\ShopOwnerController;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\TimeSlapController;
 
 
 use App\Http\Controllers\App\AppController as Apps;

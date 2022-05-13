@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\TimeSlap;
 use Exception;
-use Illuminate\Http\Request;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TimeSlapController extends Controller
@@ -18,18 +18,15 @@ class TimeSlapController extends Controller
             if ($lists->isEmpty())
                 return response(['status' => 'error', 'message' => "no found any record."]);
 
-
             $records = [];
             foreach ($lists as $list) {
                 $records[] = [
                     '_id'          => $list->_id,
                     'start_time'   => $list->start_time,
                     'end_time'     => $list->end_time,
-                    'no_of_services'=>$list->no_of_services,
-                    'disabled_time'=> $list->disabled_time,
-                    'status'       => $list->isActive($list->status),
-                    // 'created'      => $list->dFormat($list->created),
-                    // 'updated'      => $list->dFormat($list->updated)
+                    'no_of_services'=> $list->no_of_services,
+                    'status'       => $list->no_of_services
+
                 ];
             }
 
@@ -43,12 +40,18 @@ class TimeSlapController extends Controller
     public function store(Request $request)
     {
         try {
+
+            $slap_data = [
+                'start_time'    => $request->start_time,
+                'end_time'      => $request->end_time,
+                'no_of_services'=>$request->no_of_services,
+            ];
             $timeSlap = new TimeSlap();
             $timeSlap->vendor_id = Auth::user()->_id;
-            $timeSlap->start_time      = $request->start_time;
-            $timeSlap->end_time        = $request->end_time;
-            $timeSlap->no_of_services  = $request->no_of_services;
+            $timeSlap->day             = $request->day;
+            $timeSlap->slaps           = $slap_data;
             $timeSlap->status          = "1";
+            $timeSlap->disabled_time   = $request->disabled_time;
 
             if (!$timeSlap->save())
                 return response(['status' => 'error', 'message' => 'Time Slap not created Successfully!']);
@@ -77,6 +80,8 @@ class TimeSlapController extends Controller
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+
+
 
     public function update(Request $request, $id)
     {
