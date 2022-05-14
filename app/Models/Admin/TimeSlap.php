@@ -13,4 +13,8 @@ class TimeSlap extends BaseModel
        'created',
        'updated',
    ];
+
+   function vendorName(){
+     	return $this->hasOne('App\Models\User','_id','vendor_id')->select('name');
+     }
 }

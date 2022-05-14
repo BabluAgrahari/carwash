@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\TimeSlapController;
 use App\Http\Controllers\App\AppController as Apps;
 use App\Http\Controllers\App\HomeController;
 use App\Http\Controllers\App\VendorController;
+use App\Http\Controllers\App\TimeSlapController as TimeSlap;
 use App\Http\Controllers\App\LoginController as Login;
 
 
@@ -34,7 +35,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::resource('vehicle-modal', VehicleModelController::class);
 
     Route::resource('services', ServiceController::class);
-    Route::get('vendor-services',[ServiceController::class,'vendorServices']);
+    Route::get('vendor-services', [ServiceController::class, 'vendorServices']);
 
     Route::resource('shop-owner', ShopOwnerController::class);
     Route::post('assign-services/{id}', [ShopOwnerController::class, 'assignServices']);
@@ -42,6 +43,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::resource('driver', DriverController::class);
 
     Route::resource('time-slap', TimeSlapController::class);
+    Route::post('disable-services', [TimeSlapController::class, 'disableServices']);
 });
 
 //for mobile application
@@ -54,6 +56,9 @@ Route::group(['prefix' => 'app', 'middleware' => 'appAuth'], function () {
     Route::get('vendor', [HomeController::class, 'vendorList']);
     Route::get('vendor-list/{id}', [VendorController::class, 'vendorList']);
     Route::get('vendor-detail/{id}', [VendorController::class, 'vendorDetails']);
+
+    Route::get('time-slaps/{vendor_id}', [TimeSlap::class, 'index']);
+    Route::post('time-slaps/{id}/{key}', [TimeSlap::class, 'updateServices']);
 });
 
 

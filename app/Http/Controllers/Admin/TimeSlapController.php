@@ -13,7 +13,7 @@ class TimeSlapController extends Controller
     public function index()
     {
         try {
-            $lists = TimeSlap::desc()->get();
+            $lists = TimeSlap::get();
 
             if ($lists->isEmpty())
                 return response(['status' => 'error', 'message' => "no found any record."]);
@@ -22,12 +22,11 @@ class TimeSlapController extends Controller
             $records = [];
             foreach ($lists as $list) {
                 $records[] = [
-                    '_id'          => $list->_id,
-                    'start_time'   => $list->start_time,
-                    'end_time'     => $list->end_time,
-                    'no_of_services'=>$list->no_of_services,
-                    'disabled_time'=> $list->disabled_time,
-                    'status'       => $list->isActive($list->status),
+                    '_id'           => $list->_id,
+                    'day'           => ucwords($list->day),
+                    'slaps'         => $list->slaps,
+                    'disable_date'  => $list->disable_date,
+                    'status'        => $list->isActive($list->status),
                     // 'created'      => $list->dFormat($list->created),
                     // 'updated'      => $list->dFormat($list->updated)
                 ];
@@ -45,9 +44,9 @@ class TimeSlapController extends Controller
         try {
             $timeSlap = new TimeSlap();
             $timeSlap->vendor_id = Auth::user()->_id;
-            $timeSlap->start_time      = $request->start_time;
-            $timeSlap->end_time        = $request->end_time;
-            $timeSlap->no_of_services  = $request->no_of_services;
+            $timeSlap->day             = $request->day;
+            $timeSlap->day_code        = $request->day_code;
+            // $timeSlap->slaps           = $slap_data;
             $timeSlap->status          = "1";
 
             if (!$timeSlap->save())
@@ -81,10 +80,16 @@ class TimeSlapController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            $slap_data = [
+                'start_time'    => $request->start_time,
+                'end_time'      => $request->end_time,
+                'no_of_services' => $request->no_of_services,
+            ];
             $timeSlap = TimeSlap::find($id);
-            $timeSlap->start_time      = $request->start_time;
-            $timeSlap->end_time        = $request->end_time;
-            $timeSlap->no_of_service   = $request->no_of_service;
+            if (!empty($timeSlap->slaps))
+                $slaps = $timeSlap->slaps;
+            $slaps[] = $slap_data;
+            $timeSlap->slaps           = $slaps;
 
             if ($timeSlap->save())
                 return response(['status' => 'success', 'message' => 'Time Slap updated Successfully!']);
@@ -95,12 +100,21 @@ class TimeSlapController extends Controller
         }
     }
 
-
-    public function destroy(TimeSlap $timeSlap)
+    public function disableServices(Request $request)
     {
-        if ($timeSlap->delete())
-            return response(['status' => 'success', 'message' => 'Time Slap deleted Successfully!']);
+        try {
+            $date = strtotime($request->disable_date);
+            $day = date('l', $date);
 
-        return response(['status' => 'error', 'message' => 'Time Slap not deleted!']);
+            $timeSlap = TimeSlap::where('vendor_id', Auth::user()->_id)->where('day', strtolower($day))->first();
+            $timeSlap->status = '0';
+            $timeSlap->disable_date = $date;
+            if (!$timeSlap->save())
+                return response(['status' => 'error', 'message' => 'Time Slap not disabled successfully!']);
+
+            return response(['status' => 'success', 'message' => $day . ' Time Slap disabled successfully!']);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
+        }
     }
 }
