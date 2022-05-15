@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\validation\Admin\CreateService;
+use App\Http\Requests\validation\Admin\Services\Create;
 use App\Models\Admin\Service;
 use App\Models\Admin\Category;
 use App\Models\Admin\VehicleBrand;
@@ -57,9 +58,9 @@ class ServiceController extends Controller
     }
 
 
-    public function store(CreateService $request)
+    public function store(Create $request)
     {
-        // try {
+        try {
             $category = Category::where('user_id',  Auth::user()->_id)->where('_id', $request->category)->first();
 
             if (empty($category))
@@ -105,9 +106,9 @@ class ServiceController extends Controller
                 return response(['status' => 'success', 'message' => 'Service created successfully!']);
 
             return response(['status' => 'error', 'message' => 'Service not created Successfully!']);
-        // } catch (Exception $e) {
-        //     return response(['status' => 'error', 'message' => $e->getMessage()]);
-        // }
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
+        }
     }
 
 
@@ -121,7 +122,7 @@ class ServiceController extends Controller
         }
     }
 
-    public function update(CreateService $request, $id)
+    public function update(Create $request, $id)
     {
         try {
             $category = Category::where('user_id', Auth::user()->_id)->where('_id', $request->category)->first();

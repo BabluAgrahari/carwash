@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\VehicleBrandController;
 use App\Http\Controllers\Admin\VehicleModelController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\ShopOwnerController;
 use App\Http\Controllers\Admin\LoginController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\App\AppController as Apps;
 use App\Http\Controllers\App\HomeController;
 use App\Http\Controllers\App\VendorController;
 use App\Http\Controllers\App\TimeSlapController as TimeSlap;
+use App\Http\Controllers\App\ProfileController as Profile;
 use App\Http\Controllers\App\LoginController as Login;
 
 
@@ -44,7 +46,10 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
     Route::resource('time-slap', TimeSlapController::class);
     Route::post('disable-services', [TimeSlapController::class, 'disableServices']);
+
+    Route::get('user', [UserController::class, 'index']);
 });
+
 
 //for mobile application
 Route::post('app/send-otp', [Login::class, 'sendOtp']);
@@ -59,6 +64,9 @@ Route::group(['prefix' => 'app', 'middleware' => 'appAuth'], function () {
 
     Route::get('time-slaps/{vendor_id}', [TimeSlap::class, 'index']);
     Route::post('time-slaps/{id}/{key}', [TimeSlap::class, 'updateServices']);
+
+     Route::post('profile', [Profile::class, 'update']);
+     Route::post('update-location', [Profile::class, 'updateLocation']);
 });
 
 

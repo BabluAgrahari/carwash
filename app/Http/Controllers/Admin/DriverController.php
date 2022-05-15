@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Validation\Admin\CreateDriver;
-use App\Http\Requests\Validation\Admin\UpdateDriver;
+use App\Http\Requests\Validation\Admin\Driver\Create;
+use App\Http\Requests\Validation\Admin\Driver\Update;
 use App\Models\Admin\Driver;
 use App\Models\User;
 use Exception;
@@ -48,7 +48,7 @@ class DriverController extends Controller
     }
 
 
-    public function store(CreateDriver $request)
+    public function store(Create $request)
     {
         try {
             $driver = new Driver();
@@ -116,7 +116,7 @@ class DriverController extends Controller
         }
     }
 
-    public function update(UpdateDriver $request, $id)
+    public function update(Update $request, $id)
     {
         try {
             $driver = Driver::find($id);

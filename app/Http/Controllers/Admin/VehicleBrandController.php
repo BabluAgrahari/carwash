@@ -7,7 +7,7 @@ use App\Models\Admin\VehicleBrand;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Http\Requests\Validation\Admin\CreateVehicleBrand;
+use App\Http\Requests\validation\Admin\VehicleBrand\Create;
 
 class VehicleBrandController extends Controller
 {
@@ -16,31 +16,31 @@ class VehicleBrandController extends Controller
         try {
             $lists = VehicleBrand::desc()->get();
 
-           if($lists->isEmpty())
-                  return response(['status' =>'error', 'message' =>"no found any record."]);
+            if ($lists->isEmpty())
+                return response(['status' => 'error', 'message' => "no found any record."]);
 
             $records = [];
-            foreach($lists as $list){
-            $records[] = [
-             '_id'          =>$list->_id,
-             'user_id'      =>$list->user_id,
-             'name'         =>$list->name,
-             'icon'         =>(!empty($list->icon))?asset('icon/'.$list->icon):'',
-             'status'       =>$list->isActive($list->status),
-             'created'      =>$list->dFormat($list->created),
-             'updated'      =>$list->dFormat($list->updated)
-             ];
-             }
+            foreach ($lists as $list) {
+                $records[] = [
+                    '_id'          => $list->_id,
+                    'user_id'      => $list->user_id,
+                    'name'         => $list->name,
+                    'icon'         => (!empty($list->icon)) ? asset('icon/' . $list->icon) : '',
+                    'status'       => $list->isActive($list->status),
+                    'created'      => $list->dFormat($list->created),
+                    'updated'      => $list->dFormat($list->updated)
+                ];
+            }
 
-            return response(['status' =>'success', 'data' => $records]);
+            return response(['status' => 'success', 'data' => $records]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
 
-    public function store(Request $request)
+    public function store(Create $request)
     {
-       
+
         try {
             $vehicleBrand = new VehicleBrand();
             $vehicleBrand->user_id = Auth::user()->_id;
@@ -56,28 +56,28 @@ class VehicleBrandController extends Controller
             return response(['status' => 'error', 'message' => 'Vehicle Brand not created Successfully!']);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
-        } 
+        }
     }
 
     public function show($id)
     {
         try {
             $list = VehicleBrand::find($id);
-             $record = [
-              'name'   =>$list->name,
-              'status' =>$list->status,
-              'icon'   =>(!empty($list->icon))?asset('icon/'.$list->icon):'',
-              'created'=>$list->dFormat($list->created),
-              'updated'=>$list->dFormat($list->updated)
+            $record = [
+                'name'   => $list->name,
+                'status' => $list->status,
+                'icon'   => (!empty($list->icon)) ? asset('icon/' . $list->icon) : '',
+                'created' => $list->dFormat($list->created),
+                'updated' => $list->dFormat($list->updated)
             ];
-          
-            return response(['status' =>'success', 'data' => $record]);
+
+            return response(['status' => 'success', 'data' => $record]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
 
-    public function update(CreateVehicleBrand  $request, $id)
+    public function update(Create  $request, $id)
     {
         try {
             $vehicleBrand = VehicleBrand::find($id);
@@ -93,15 +93,14 @@ class VehicleBrandController extends Controller
             return response(['status' => 'error', 'message' => 'Vehicle Brand not updated!']);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
-        } 
+        }
     }
 
     public function destroy(VehicleBrand $vehicleBrand)
     {
-        if($vehicleBrand->delete())
-        return response(['status' => 'success', 'message' => 'Vehicle Brand deleted Successfully!']);
+        if ($vehicleBrand->delete())
+            return response(['status' => 'success', 'message' => 'Vehicle Brand deleted Successfully!']);
 
-         return response(['status' => 'error', 'message' => 'Vehicle Brand not deleted!']);
-      
+        return response(['status' => 'error', 'message' => 'Vehicle Brand not deleted!']);
     }
 }

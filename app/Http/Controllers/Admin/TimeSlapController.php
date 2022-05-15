@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Validation\Admin\TimeSlap\DisableServices;
+use App\Http\Requests\Validation\Admin\TimeSlap\UpdateTimeSlap;
 use App\Models\Admin\TimeSlap;
 use Exception;
 use Illuminate\Http\Request;
@@ -46,7 +48,6 @@ class TimeSlapController extends Controller
             $timeSlap->vendor_id = Auth::user()->_id;
             $timeSlap->day             = $request->day;
             $timeSlap->day_code        = $request->day_code;
-            // $timeSlap->slaps           = $slap_data;
             $timeSlap->status          = "1";
 
             if (!$timeSlap->save())
@@ -77,7 +78,7 @@ class TimeSlapController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateTimeSlap $request, $id)
     {
         try {
             $slap_data = [
@@ -100,7 +101,7 @@ class TimeSlapController extends Controller
         }
     }
 
-    public function disableServices(Request $request)
+    public function disableServices(DisableServices $request)
     {
         try {
             $date = strtotime($request->disable_date);

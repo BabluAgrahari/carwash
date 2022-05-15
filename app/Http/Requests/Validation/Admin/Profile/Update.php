@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\validation\Admin;
+namespace App\Http\Requests\Validation\Admin\Profile;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateShop extends FormRequest
+class Update extends FormRequest
 {
 
     public function authorize()
@@ -17,10 +17,15 @@ class CreateShop extends FormRequest
     public function rules()
     {
         return [
-            'name'     => 'required|string|between:2,30',
-            'email'    => 'required|email|max:155',
-            'phone_no' => 'required|numeric|digits:10',
-            'address'  => 'required|string|between:2,100'
+            'name' => 'required|string|min:2|max:50',
+            'email' => 'nullable|email|min:2|max:50',
+            'phone' => 'nullable|numeric|digits:10',
+            'city'    =>  'nullable|min:2|max:30',
+            'state'   =>  'nullable|min:2|max:30',
+            'country' =>  'nullable|min:2|max:30',
+            'address' => 'nullable|min:2|max:1000'
+
+            // 'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
     public function messages()
@@ -29,12 +34,6 @@ class CreateShop extends FormRequest
             'name.required'          => 'Name field is Required.',
             'name.string'            => 'Name should be string.',
             'name.max'               => 'Name should not be maximum 30 Character.',
-            'email.required'         => 'Email field is Required.',
-            'email.email'            => 'Please enter valid Email.',
-            'email.max'              => 'Email should not be maximum 30 Character.',
-            'phone_no.required'      => 'Phone Number field is Required.',
-            'phone_no.numeric'       => 'Phone Number Must be numeric value.',
-            'phone_no.digits'        => 'Phone Number Must be 10 digits.',
         ];
     }
 
@@ -42,7 +41,7 @@ class CreateShop extends FormRequest
     {
         // throw new HttpResponseException();
         throw new HttpResponseException(response()->json([
-            'success' =>'error',
+            'status' => "error",
             'type'   => "validation",
             'message' => $validator->errors(),
         ]));

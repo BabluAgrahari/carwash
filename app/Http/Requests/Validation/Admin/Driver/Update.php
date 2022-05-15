@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Validation\Admin;
+namespace App\Http\Requests\Validation\Admin\Driver;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateDriver extends FormRequest
+class Update extends FormRequest
 {
 
     public function authorize()

@@ -17,17 +17,27 @@ class TimeSlapController extends Controller
             if ($lists->isEmpty())
                 return response(['status' => 'error', 'message' => "no found any record."]);
 
+            for ($i = 0; $i < 5; $i++) {
+                $dates[] = strtotime('+' . $i . 'days');
+                $days[]  = strtolower(date('l', strtotime('+' . $i . 'days')));
+            }
             $records = [];
-            foreach ($lists as $list) {
-                $records[] = [
-                    '_id'       => $list->_id,
-                    'vendor_id' => $list->vendor_id,
-                    'vendor_name' => !empty($list->vendorName['name']) ? $list->vendorName['name'] : '',
-                    'day'       => $list->day,
-                    'day_code'  => $list->day_code,
-                    'slaps'     => $list->slaps,
-                    'status'    => $list->no_of_services
-                ];
+
+            foreach ($days as $day_k=>$day) {
+                foreach ($lists as $key => $list) {
+                    if ($day == $list->day) {
+                        $records[] = [
+                            '_id'       => $list->_id,
+                            'vendor_id' => $list->vendor_id,
+                            'vendor_name' => !empty($list->vendorName['name']) ? $list->vendorName['name'] : '',
+                            'day'       => $list->day,
+                            'day_code'  => $list->day_code,
+                            'date'      => !empty($dates[$day_k])?$dates[$day_k]:'',
+                            'slaps'     => $list->slaps,
+                            'status'    => $list->status
+                        ];
+                    }
+                }
             }
 
             return response(['status' => 'success', 'data' => $records]);
@@ -53,5 +63,4 @@ class TimeSlapController extends Controller
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
-
 }

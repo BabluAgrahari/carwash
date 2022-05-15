@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Validation\Admin\Category\Create;
 use App\Models\Admin\Category;
-use App\Http\Requests\Validation\Admin\CreateCategory;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -41,7 +41,7 @@ class CategoryController extends Controller
     }
 
 
-    public function store(CreateCategory $request)
+    public function store(Create $request)
     {
         try {
             $category = new Category();
@@ -79,7 +79,7 @@ class CategoryController extends Controller
         }
     }
 
-    public function update(CreateCategory $request, $id)
+    public function update(Create $request, $id)
     {
         try {
             $category = Category::find($id);

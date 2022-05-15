@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\validation\Admin;
+namespace App\Http\Requests\Validation\Admin\Category;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateVehicleBrand extends FormRequest
+class Create extends FormRequest
 {
 
     public function authorize()
@@ -18,7 +18,7 @@ class CreateVehicleBrand extends FormRequest
     {
         return [
             'name' => 'required|string',
-           // 'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'icon' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
     public function messages()
@@ -34,7 +34,7 @@ class CreateVehicleBrand extends FormRequest
     {
         // throw new HttpResponseException();
         throw new HttpResponseException(response()->json([
-            'status' => 'error',
+            'status' => "error",
             'type'   => "validation",
             'message' => $validator->errors(),
         ]));

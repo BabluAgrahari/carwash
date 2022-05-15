@@ -68,6 +68,7 @@ class LoginController extends AppController
             $user->otp_date_time = $data['otp_date_time'];
             $user->phone_no      = $data['phone_no'];
             $user->token         =  Str::random(60).time();
+            $user->role          = 'customer';
             array_push($message, "OTP sent successfully");
         }
         $message1 = implode(" ", $message);

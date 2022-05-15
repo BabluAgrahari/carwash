@@ -7,8 +7,10 @@ use App\Models\Admin\ShopOwner;
 use App\Models\Admin\Service;
 use App\Http\Requests\validation\Admin\CreateShop;
 use App\Http\Requests\validation\Admin\UpdateShop;
+use App\Models\Admin\TimeSlap;
 use App\Models\User;
 use Exception;
+use Facade\FlareClient\Time\Time;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -52,6 +54,9 @@ class shopOwnerController extends Controller
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+
+
+
 
     public function store(Request $request)
     {
@@ -102,7 +107,8 @@ class shopOwnerController extends Controller
             $user->password = Hash::make($request->password);
             $user->role = 'vendor';
             $user->vendor_id = $id;
-            $user->save();
+            if ($user->save())
+                $this->addTimeSlap($user->_id);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
@@ -183,6 +189,7 @@ class shopOwnerController extends Controller
 
     public function assignServices(Request $request, $id)
     {
+
         $services   = $request->services;
         $shopOwner = ShopOwner::find($id);
         $shopOwner->services = $services;
@@ -192,14 +199,68 @@ class shopOwnerController extends Controller
 
         foreach ($services as $service) {
             $service = Service::find($service);
-            $serviceArr = [];
-            if (!empty($service->shop_owner))
-                $serviceArr= $service->shop_owner;
-            $serviceArr[] = $id;
-            $service->shop_owner = $serviceArr;
+            $service->shop_owner = $id;
             $service->save();
         }
 
         return response(['status' => 'success', 'message' => 'Services assigned Successfully!']);
+    }
+
+
+    private function addTimeSlap($vendor_id)
+    {
+
+        $days = ['monday', 'tuesday', 'webnesday', 'thrusday', 'friday', 'saturday', 'sunday'];
+        $slaps = [
+            [
+                'start_time'    => '10:00 AM',
+                'end_time'      => '11:00 AM',
+                'no_of_services' => 1,
+            ],
+            [
+                'start_time'    => '11:00 AM',
+                'end_time'      => '12:00 AM',
+                'no_of_services' => 1,
+            ],
+            [
+                'start_time'    => '12:00 AM',
+                'end_time'      => '01:00 PM',
+                'no_of_services' => 1,
+            ],
+            [
+                'start_time'    => '01:00 PM',
+                'end_time'      => '02:00 PM',
+                'no_of_services' => 1,
+            ],
+            [
+                'start_time'    => '03:00 PM',
+                'end_time'      => '04:00 PM',
+                'no_of_services' => 1,
+            ],
+            [
+                'start_time'    => '04:00 PM',
+                'end_time'      => '05:00 PM',
+                'no_of_services' => 1,
+            ],
+            [
+                'start_time'    => '05:00 PM',
+                'end_time'      => '06:00 PM',
+                'no_of_services' => 1,
+            ],
+            [
+                'start_time'    => '06:00 PM',
+                'end_time'      => '07:00 PM',
+                'no_of_services' => 1,
+            ],
+        ];
+        foreach ($days as $day) {
+            $timeSlap = new TimeSlap();
+            $timeSlap->vendor_id = $vendor_id;
+            $timeSlap->day             = $day;
+            $timeSlap->day_code        = substr($day, 0, 2);
+            $timeSlap->status          = "1";
+            $timeSlap->slaps           = $slaps;
+            $timeSlap->save();
+        }
     }
 }

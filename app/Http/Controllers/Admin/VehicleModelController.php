@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\validation\Admin\VehicleModal\Create;
 use App\Models\Admin\VehicleModel;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\Validation\Admin\CreateVehicleModel;
 
 class VehicleModelController extends Controller
 {
@@ -14,7 +14,7 @@ class VehicleModelController extends Controller
     {
         try {
             $lists = VehicleModel::desc()->get();
-             
+
              if($lists->isEmpty())
                   return response(['status' =>'error', 'message' =>"no found any record."]);
 
@@ -39,7 +39,7 @@ class VehicleModelController extends Controller
     }
 
 
-    public function store(CreateVehicleModel $request)
+    public function store(Create $request)
     {
 
         try {
@@ -58,7 +58,7 @@ class VehicleModelController extends Controller
             return response(['status' => 'error', 'message' => 'Vehicle Model not created Successfully!']);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
-        } 
+        }
     }
 
     public function show($id)
@@ -71,7 +71,7 @@ class VehicleModelController extends Controller
         }
     }
 
-    public function update(CreateVehicleModel  $request, $id)
+    public function update(Create $request, $id)
     {
         try {
             $vehicleModel = VehicleModel::find($id);
