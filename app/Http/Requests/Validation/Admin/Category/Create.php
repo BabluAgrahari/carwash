@@ -18,6 +18,7 @@ class Create extends FormRequest
     {
         return [
             'name' => 'required|string',
+            // 'demo' => 'required'
             // 'icon' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
@@ -32,11 +33,13 @@ class Create extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
+       // print_r($validator);
         // throw new HttpResponseException();
-        throw new HttpResponseException(response()->json([
+        throw new HttpResponseException(response()->json(array(
             'status' => "error",
             'type'   => "validation",
-            'message' => $validator->errors(),
-        ]));
+            'message' => $validator->errors()
+        )));
+
     }
 }

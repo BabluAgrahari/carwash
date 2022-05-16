@@ -197,9 +197,12 @@ class shopOwnerController extends Controller
         if (!$shopOwner->save())
             return response(['status' => 'error', 'message' => 'Services not Assigned']);
 
+        $shop_ids = [];
         foreach ($services as $service) {
             $service = Service::find($service);
-            $service->shop_owner = $id;
+            $shop_ids = $service->shop_owners;
+            $shop_ids[] = $id;
+            $service->shop_owners = $shop_ids;
             $service->save();
         }
 

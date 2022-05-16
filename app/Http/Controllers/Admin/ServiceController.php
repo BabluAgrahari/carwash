@@ -43,7 +43,7 @@ class ServiceController extends Controller
              'vehicle_model'   =>!empty($list->vehicleModel['name'])?$list->vehicleModel['name']:'',
              'vehicle_model_id'=>$list->vehicle_model,
              'service_type'    =>$list->service_type,
-             'vehicle_brand_id'=>$list->vehicle_brand,
+             'shop_owners'     =>$list->shop_owners,
               'icon'           =>!empty($list->icon)?asset('services/'.$list->icon):'',
              'status'          =>$list->isActive($list->status),
              'created'         =>$list->dFormat($list->created),
@@ -61,21 +61,6 @@ class ServiceController extends Controller
     public function store(Create $request)
     {
         try {
-            $category = Category::where('user_id',  Auth::user()->_id)->where('_id', $request->category)->first();
-
-            if (empty($category))
-                return response(['status' => 'error', 'message' => 'Invalid Category!']);
-
-            $vehicleBrand = VehicleBrand::where('user_id', Auth::user()->_id)->where('_id', $request->vehicle_brand)->first();
-
-            if (empty($vehicleBrand))
-                return response(['status' => 'error', 'message' => 'Invalid Vehicle Brand!']);
-
-            $vehicleModel = VehicleModel::where('user_id', Auth::user()->_id)->where('_id', $request->vehicle_model)->first();
-
-            if (empty($vehicleModel))
-                return response(['status' => 'error', 'message' => 'Invalid Vehicle Model!']);
-
 
             $service = new Service();
             $service->user_id  = Auth::user()->_id;
@@ -125,21 +110,6 @@ class ServiceController extends Controller
     public function update(Create $request, $id)
     {
         try {
-            $category = Category::where('user_id', Auth::user()->_id)->where('_id', $request->category)->first();
-
-            if (empty($category)) {
-                return response(['status' => 'error', 'message' => 'Invalid Category!']);
-            }
-            $vehicleBrand = VehicleBrand::where('user_id', Auth::user()->_id)->where('_id', $request->vehicle_brand)->first();
-
-            if (empty($vehicleBrand)) {
-                return response(['status' => 'error', 'message' => 'Invalid Vehicle Brand!']);
-            }
-            $vehicleModel = VehicleModel::where('user_id', Auth::user()->_id)->where('_id', $request->vehicle_model)->first();
-
-            if (empty($vehicleModel)) {
-                return response(['status' => 'error', 'message' => 'Invalid Vehicle Model!']);
-            }
 
             $service = Service::find($id);
             $service->category          = $request->category;
