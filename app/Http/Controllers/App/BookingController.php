@@ -10,15 +10,15 @@ use Illuminate\Http\Request;
 
 class BookingController extends AppController
 {
-    public function index($vendor_id)
-    {
-        try {
+    // public function index($vendor_id)
+    // {
+    //     try {
 
-            return response(['status' => 'success', 'data' => $records]);
-        } catch (Exception $e) {
-            return response(['status' => 'error', 'message' => $e->getMessage()]);
-        }
-    }
+    //         return response(['status' => 'success', 'data' => $records]);
+    //     } catch (Exception $e) {
+    //         return response(['status' => 'error', 'message' => $e->getMessage()]);
+    //     }
+    // }
 
 
     public function store(Request $request)
@@ -45,10 +45,9 @@ class BookingController extends AppController
         }
     }
 
-
     // private function updateInventory($request)
     // {
-    //     $timeSlab = TimeSlap::where([['_id', '=', $request->time_slab_id], ['vendor_id', '=', $request->vendor_id]])->first();
-    //     $timeSlab->
+    //     $timeSlab = TimeSlap::find($request->time_slab_id);
+    //     $
     // }
 }
