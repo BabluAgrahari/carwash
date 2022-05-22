@@ -29,9 +29,11 @@ class shopOwnerController extends Controller
             foreach ($lists as $list) {
                 $records[] = [
                     '_id'              => $list->_id,
+                    'name'             => $list->name,
+                    'email'            => $list->email,
+                    'mobile_no'        => $list->mobile_no,
                     'business_name'    => $list->business_name,
                     'business_email'   => $list->business_email,
-                    'mobile'           => $list->mobile,
                     'phone'            => $list->phone,
                     'city'             => $list->city,
                     'pincode'          => $list->pincode,
@@ -64,9 +66,11 @@ class shopOwnerController extends Controller
 
             $shopOwner = new ShopOwner();
             $shopOwner->user_id        = Auth::user()->_id;
+            $shopOwner->name           = $request->name;
+            $shopOwner->email          = $request->email;
+            $shopOwner->mobile_no      = $request->mobile_no;
             $shopOwner->business_name  = $request->business_name;
             $shopOwner->business_email = $request->business_email;
-            $shopOwner->mobile         = $request->mobile;
             $shopOwner->phone          = $request->phone;
             $shopOwner->city           = $request->city;
             $shopOwner->pincode        = $request->pincode;
@@ -86,7 +90,6 @@ class shopOwnerController extends Controller
             if (!empty($request->file('cover_photo')))
                 $shopOwner->cover_photo  = singleFile($request->file('cover_photo'), 'shop/');
 
-
             if (!$shopOwner->save())
                 return response(['status' => 'error', 'message' => 'Shop Owner not created Successfully!']);
 
@@ -102,13 +105,20 @@ class shopOwnerController extends Controller
     {
         try {
             $user = new User();
-            $user->name = $request->business_name;
-            $user->email = $request->business_email;
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->mobile_no = $request->mobile_no;
             $user->password = Hash::make($request->password);
             $user->role = 'vendor';
             $user->vendor_id = $id;
-            if ($user->save())
+            if ($user->save()) {
+
+                $vendor = ShopOwner::find($id);
+                $vendor->account_id = $user->_id;
+                $vendor->save();
+
                 $this->addTimeSlap($user->_id);
+            }
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
@@ -120,9 +130,11 @@ class shopOwnerController extends Controller
             $list = ShopOwner::find($id);
             $record = [
                 '_id'              => $list->_id,
+                'name'             => $list->name,
+                'email'            => $list->email,
+                'mobile_no'        => $list->mobile_no,
                 'business_name'    => $list->business_name,
                 'business_email'   => $list->business_email,
-                'mobile'           => $list->mobile,
                 'phone'            => $list->phone,
                 'city'             => $list->city,
                 'pincode'          => $list->pincode,
@@ -147,9 +159,11 @@ class shopOwnerController extends Controller
     {
         try {
             $shopOwner = ShopOwner::find($id);
+            $shopOwner->name           = $request->name;
+            $shopOwner->email          = $request->email;
+            $shopOwner->mobile_no      = $request->mobile_no;
             $shopOwner->business_name  = $request->business_name;
             $shopOwner->business_email = $request->business_email;
-            $shopOwner->mobile         = $request->mobile;
             $shopOwner->phone          = $request->phone;
             $shopOwner->city           = $request->city;
             $shopOwner->pincode        = $request->pincode;

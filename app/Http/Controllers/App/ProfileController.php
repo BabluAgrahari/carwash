@@ -9,6 +9,29 @@ use Illuminate\Http\Request;
 
 class ProfileController extends AppController
 {
+
+    public function userData()
+    {
+        try {
+            $user = User::find($this->AppAuth('_id'));
+            $record = [
+                'name'    => $user->name,
+                'email'   => $user->email,
+                'phone'   => $user->phone,
+                'city'    => $user->city,
+                'state'   => $user->state,
+                'pincode' => $user->pincode,
+                'country' => $user->counter,
+                'address' => $user->address
+            ];
+
+            return response(['status' => 'success', 'data' => $record]);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+
     public function update(Request $request)
     {
         try {

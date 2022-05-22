@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ShopOwnerController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\TimeSlapController;
 use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\PassbookController;
 
 
 use App\Http\Controllers\App\AppController as Apps;
@@ -50,6 +51,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('disable-services', [TimeSlapController::class, 'disableServices']);
 
     Route::resource('booking', BookingController::class);
+    Route::resource('passbook', PassbookController::class);
 
     Route::get('user', [UserController::class, 'index']);
 });
@@ -65,11 +67,14 @@ Route::group(['prefix' => 'app', 'middleware' => 'appAuth'], function () {
     Route::get('vendor', [HomeController::class, 'vendorList']);
     Route::get('vendor-list/{id}', [VendorController::class, 'vendorList']);
     Route::get('vendor-detail/{id}', [VendorController::class, 'vendorDetails']);
+    Route::get('vehicle-brand', [HomeController::class, 'vehicleBrand']);
+    Route::get('service-type/{type}', [HomeController::class, 'serviceWithType']);
 
     Route::get('time-slaps/{vendor_id}', [TimeSlap::class, 'index']);
     Route::post('time-slaps/{id}/{key}', [TimeSlap::class, 'updateServices']);
 
-    Route::post('profile', [Profile::class, 'update']);
+    Route::get('profile-detail', [Profile::class, 'userData']);
+    Route::post('profile-update', [Profile::class, 'update']);
     Route::post('update-location', [Profile::class, 'updateLocation']);
 
     Route::post('save-booking', [Booking::class, 'store']);

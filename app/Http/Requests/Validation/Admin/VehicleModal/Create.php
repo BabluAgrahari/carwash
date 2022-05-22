@@ -18,7 +18,7 @@ class Create extends FormRequest
     {
         return [
             'name' => 'required|string|min:2|max:255',
-            'vehicle_brand' => 'required',
+            'brand_id' => 'required',
         ];
     }
     public function messages()

@@ -3,26 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\validation\Admin\CreateService;
 use App\Http\Requests\validation\Admin\Services\Create;
 use App\Models\Admin\Service;
-use App\Models\Admin\Category;
-use App\Models\Admin\VehicleBrand;
-use App\Models\Admin\VehicleModel;
-use Storage;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
-
     public function index()
     {
         try {
             $lists = Service::desc()->get();
             if($lists->isEmpty())
                   return response(['status' =>'error', 'message' =>"no found any record."]);
-
 
             $records = [];
             foreach($lists as $list){
@@ -32,10 +26,10 @@ class ServiceController extends Controller
              'title'           =>$list->title,
              'sort_description'=>$list->sort_description,
              'description'     =>$list->description,
-             'time_duration'   =>$list->time_duration,
              'service_charge'  =>$list->service_charge,
              'discount'        =>$list->discount,
              'gst_charges'     =>$list->gst_charges,
+             'total_charges'   =>$list->total_charges,
              'vehicle_brand'   =>!empty($list->vehicleBrand['name'])?$list->vehicleBrand['name']:'',
              'vehicle_brand_id'=>$list->vehicle_brand,
              'category'        =>!empty($list->cCategory['name'])?$list->cCategory['name']:'',
@@ -71,10 +65,10 @@ class ServiceController extends Controller
             $service->title             = $request->title;
             $service->sort_description  = $request->sort_description;
             $service->description       = $request->description;
-            $service->time_duration     = $request->time_duration;
             $service->service_charge    = $request->service_charge;
             $service->discount          = $request->discount;
             $service->gst_charges       = $request->gst_charges;
+            $service->total_charges     = $request->total_charges;
             $service->status            = $request->status;
 
             if (!empty($request->file('icon')))
@@ -107,10 +101,10 @@ class ServiceController extends Controller
         }
     }
 
-    public function update(Create $request, $id)
+     public function update(Request $request, $id)
     {
-        try {
 
+        try {
             $service = Service::find($id);
             $service->category          = $request->category;
             $service->vehicle_brand     = $request->vehicle_brand;
@@ -119,10 +113,10 @@ class ServiceController extends Controller
             $service->service_tittle    = $request->service_tittle;
             $service->sort_description  = $request->sort_description;
             $service->description       = $request->description;
-            $service->time_duration     = $request->time_duration;
             $service->service_charge    = $request->service_charge;
             $service->discount          = $request->discount;
             $service->gst_charges       = $request->gst_charges;
+            $service->total_charges     = $request->total_charges;
             $service->status            = $request->status;
 
 
@@ -137,7 +131,7 @@ class ServiceController extends Controller
                 $service->video = $path;
             }
             if ($service->save())
-                return response(['status' => 'success', 'message' => 'Service Updated successfully!']);
+                echo response(['status' => 'success', 'message' => 'Service Updated successfully!']);
 
             return response(['status' => 'error', 'message' => 'Service Not Updated Successfully!']);
         } catch (Exception $e) {
@@ -177,10 +171,10 @@ class ServiceController extends Controller
              'title'           =>$list->title,
              'sort_description'=>$list->sort_description,
              'description'     =>$list->description,
-             'time_duration'   =>$list->time_duration,
              'service_charge'  =>$list->service_charge,
              'discount'        =>$list->discount,
              'gst_charges'     =>$list->gst_charges,
+             'total_charges'   =>$list->total_charges,
              'vehicle_brand'   =>!empty($list->vehicleBrand['name'])?$list->vehicleBrand['name']:'',
              'vehicle_brand_id'=>$list->vehicle_brand,
              'category'        =>!empty($list->cCategory['name'])?$list->cCategory['name']:'',

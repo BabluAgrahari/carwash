@@ -24,8 +24,8 @@ class VehicleModelController extends Controller
             $records[] = [
              '_id'          =>$list->_id,
              'name'         =>$list->name,
-             'vehicle_brand'=>$list->vehicleBrand['name'],
-             'vehicle_brand_id'=>$list->vehicle_brand,
+             'vehicle_brand'=>!empty($list->vehicleBrand['name'])?$list->vehicleBrand['name']:'',
+             'vehicle_brand_id'=>$list->brand_id,
              'status'       =>$list->isActive($list->status),
              'created'      =>$list->dFormat($list->created),
              'updated'      =>$list->dFormat($list->updated)
@@ -46,7 +46,7 @@ class VehicleModelController extends Controller
             $vehicleModel = new VehicleModel();
             $vehicleModel->user_id  = Auth::user()->_id;
             $vehicleModel->name     = $request->name;
-            $vehicleModel->vehicle_brand = $request->vehicle_brand;
+            $vehicleModel->brand_id = $request->brand_id;
             $vehicleModel->status   = $request->status;
 
             if (!empty($request->file('icon')))
@@ -76,7 +76,7 @@ class VehicleModelController extends Controller
         try {
             $vehicleModel = VehicleModel::find($id);
             $vehicleModel->name     = $request->name;
-            $vehicleModel->vehicle_brand = $request->vehicle_brand;
+            $vehicleModel->brand_id = $request->brand_id;
             $vehicleModel->status   = $request->status;
 
             if (!empty($request->file('icon')))
@@ -91,11 +91,12 @@ class VehicleModelController extends Controller
         }
     }
 
-    public function destroy(VehicleModel $vehicleModel)
+    public function destroy($id)
     {
+        $vehicleModel = VehicleModel::find($id);
         if($vehicleModel->delete())
-        return response(['status' => 'success', 'message' => 'Category deleted Successfully!']);
+        return response(['status' => 'success', 'message' => 'Vehicle Model deleted Successfully!']);
 
-         return response(['status' => 'error', 'message' => 'Category not deleted!']);
+         return response(['status' => 'error', 'message' => 'Vehicle Model not deleted!']);
     }
 }

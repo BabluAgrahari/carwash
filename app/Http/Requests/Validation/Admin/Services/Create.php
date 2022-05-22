@@ -25,12 +25,12 @@ class Create extends FormRequest
             'title'             => 'required|string|max:255',
             'sort_description'  => 'required|string|max:255',
             'description'       => 'required|string|max:500',
-            'time_duration'     => 'required',
-           // 'video'             => 'nullable|file|mimetypes:video/mp4',
-           // 'multiple_images'   => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'video'             => 'nullable|file|mimetypes:video/mp4',
+            // 'multiple_images'   => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'service_charge'    => 'required|numeric',
-            'discount'          => 'required|string',
-            'gst_charges'       => 'required|string',
+            'discount'          => 'required|numeric',
+            'gst_charges'       => 'required|numeric',
+            'total_charges'     => 'required|numeric',
         ];
     }
     public function messages()

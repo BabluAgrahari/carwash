@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class VehicleBrand extends BaseModel
 {
     use HasFactory;
-    
+
     protected $dates = [
         'created_at',
         'updated_at',
@@ -16,4 +16,9 @@ class VehicleBrand extends BaseModel
      protected $fillable = [
          'name', 'icon', 'status','created_at','updated_at',
      ];
+
+     function vehicleModal(){
+         return $this->belongsToMany('App\Models\Admin\VehicleModel','_id','brand_id');
+     }
+
 }

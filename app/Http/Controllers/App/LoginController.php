@@ -100,7 +100,8 @@ class LoginController extends AppController
         } elseif (!$token) {
             return response(['status' => 'error', 'message' => 'Invaliad OTP!']);
         } elseif ($token) {
-            return response(['status' => 'success', 'message' => 'OTP verified successfully!','token'=>$token]);
+            $user = User::where('token',$token)->where('phone_no', $credentials['phone_no'])->first();
+            return response(['status' => 'success', 'message' => 'OTP verified successfully!','customer_id'=>$user->_id,'token'=>$token]);
         }
     }
 

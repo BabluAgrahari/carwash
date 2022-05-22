@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class VehicleModel extends BaseModel
 {
     use HasFactory;
-    
+
     protected $dates = [
         'created_at',
         'updated_at',
@@ -20,8 +20,9 @@ class VehicleModel extends BaseModel
 
      function vehicleBrand(){
 
-     	return $this->hasOne('App\Models\Admin\VehicleBrand','_id','vehicle_brand')->select('name');
+     	return $this->hasOne('App\Models\Admin\VehicleBrand','_id','brand_id')->select('name');
      }
 
-   
+
+
 }
