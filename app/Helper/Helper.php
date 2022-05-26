@@ -191,7 +191,7 @@ if (!function_exists('MoneyPartnerOption')) {
 
     function MoneyPartnerOption()
     {
-       
+
         $outlet = Outlet::select('money_transfer_option')->find(Auth::user()->outlet_id);
         if (!empty($outlet))
             return (object)$outlet->money_transfer_option;
@@ -225,4 +225,10 @@ function verify_url($base_url)
         return false;
 
     return true;
+}
+
+
+function userRole(){
+
+
 }

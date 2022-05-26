@@ -23,12 +23,29 @@ class HomeController extends AppController
 
             $records = [];
             foreach ($lists as $list) {
-                $records[] = [
-                    '_id'          => $list->_id,
-                    'title'        => $list->title,
-                    'icon'         => asset('icon/' . $list->icon),
-                    'created'      => $list->created
-                ];
+               $records[] = [
+             '_id'             =>$list->_id,
+             'user_id'         =>$list->_id,
+             'title'           =>$list->title,
+             'sort_description'=>$list->sort_description,
+             'description'     =>$list->description,
+             'service_charge'  =>$list->service_charge,
+             'discount'        =>$list->discount,
+             'gst_charges'     =>$list->gst_charges,
+             'total_charges'   =>$list->total_charges,
+             'vehicle_brand'   =>!empty($list->vehicleBrand['name'])?$list->vehicleBrand['name']:'',
+             'vehicle_brand_id'=>$list->vehicle_brand,
+             'category'        =>!empty($list->cCategory['name'])?$list->cCategory['name']:'',
+             'category_id'     =>$list->category,
+             'vehicle_model'   =>!empty($list->vehicleModel['name'])?$list->vehicleModel['name']:'',
+             'vehicle_model_id'=>$list->vehicle_model,
+             'service_type'    =>$list->service_type,
+             'shop_owners'     =>$list->shop_owners,
+              'icon'           =>!empty($list->icon)?asset('services/'.$list->icon):'',
+             'status'          =>$list->isActive($list->status),
+             'created'         =>$list->dFormat($list->created),
+             'updated'         =>$list->dFormat($list->updated)
+             ];
             }
 
             return response(['status' => 'success', 'data' => $records]);
@@ -47,11 +64,27 @@ class HomeController extends AppController
 
             $records = [];
             foreach ($lists as $list) {
-                $records[] = [
-                    '_id'            => $list->_id,
-                    'business_name'  => $list->business_name,
-                    'logo'           => asset('shop/' . $list->logo),
-                    'created'        => $list->created
+                 $records[] = [
+                    '_id'              => $list->_id,
+                    'name'             => $list->name,
+                    'email'            => $list->email,
+                    'mobile_no'        => $list->mobile_no,
+                    'business_name'    => $list->business_name,
+                    'business_email'   => $list->business_email,
+                    'phone'            => $list->phone,
+                    'city'             => $list->city,
+                    'pincode'          => $list->pincode,
+                    'country'          => $list->country,
+                    'state'            => $list->state,
+                    'gstin_no'         => $list->gstin_no,
+                    'address'          => $list->address,
+                    'description'      => $list->description,
+                    'store_status'     => $list->store_status,
+                    'verified_store'   => $list->verified_store,
+                    'whatsapp_no'      => $list->whatsapp_no,
+                    'bank_details'     => $list->bank_details,
+                    'created'          => $list->dFormat($list->created),
+                    'updated'          => $list->dFormat($list->updated)
                 ];
             }
 

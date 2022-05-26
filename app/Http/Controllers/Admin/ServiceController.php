@@ -101,11 +101,12 @@ class ServiceController extends Controller
         }
     }
 
-     public function update(Request $request, $id)
+     public function update(Create $request, $id)
     {
 
         try {
             $service = Service::find($id);
+            $service->title             = $request->title;
             $service->category          = $request->category;
             $service->vehicle_brand     = $request->vehicle_brand;
             $service->vehicle_model     = $request->vehicle_model;
@@ -131,7 +132,7 @@ class ServiceController extends Controller
                 $service->video = $path;
             }
             if ($service->save())
-                echo response(['status' => 'success', 'message' => 'Service Updated successfully!']);
+                return response(['status' => 'success', 'message' => 'Service Updated successfully!']);
 
             return response(['status' => 'error', 'message' => 'Service Not Updated Successfully!']);
         } catch (Exception $e) {
@@ -156,7 +157,7 @@ class ServiceController extends Controller
             $query = Service::desc();
              $_id = Auth::user()->vendor_id;
             $query->where(function($q) use ($_id){
-                $q->where('shop_owner','all',[$_id]);
+                $q->where('shop_owners','all',[$_id]);
             });
             $lists = $query->get();
             if($lists->isEmpty())

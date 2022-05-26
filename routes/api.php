@@ -38,6 +38,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
     Route::resource('vehicle-brand', VehicleBrandController::class);
     Route::resource('vehicle-modal', VehicleModelController::class);
+    Route::get('veh-modal/{brand_id}', [VehicleModelController::class, 'vehicleModal']);
 
     Route::resource('services', ServiceController::class);
     Route::get('vendor-services', [ServiceController::class, 'vendorServices']);

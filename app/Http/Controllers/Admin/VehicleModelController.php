@@ -15,24 +15,24 @@ class VehicleModelController extends Controller
         try {
             $lists = VehicleModel::desc()->get();
 
-             if($lists->isEmpty())
-                  return response(['status' =>'error', 'message' =>"no found any record."]);
+            if ($lists->isEmpty())
+                return response(['status' => 'error', 'message' => "no found any record."]);
 
 
             $records = [];
-            foreach($lists as $list){
-            $records[] = [
-             '_id'          =>$list->_id,
-             'name'         =>$list->name,
-             'vehicle_brand'=>!empty($list->vehicleBrand['name'])?$list->vehicleBrand['name']:'',
-             'vehicle_brand_id'=>$list->brand_id,
-             'status'       =>$list->isActive($list->status),
-             'created'      =>$list->dFormat($list->created),
-             'updated'      =>$list->dFormat($list->updated)
-             ];
-             }
+            foreach ($lists as $list) {
+                $records[] = [
+                    '_id'          => $list->_id,
+                    'name'         => $list->name,
+                    'vehicle_brand' => !empty($list->vehicleBrand['name']) ? $list->vehicleBrand['name'] : '',
+                    'vehicle_brand_id' => $list->brand_id,
+                    'status'       => $list->isActive($list->status),
+                    'created'      => $list->dFormat($list->created),
+                    'updated'      => $list->dFormat($list->updated)
+                ];
+            }
 
-            return response(['status' =>'success', 'data' => $records]);
+            return response(['status' => 'success', 'data' => $records]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
@@ -94,9 +94,29 @@ class VehicleModelController extends Controller
     public function destroy($id)
     {
         $vehicleModel = VehicleModel::find($id);
-        if($vehicleModel->delete())
-        return response(['status' => 'success', 'message' => 'Vehicle Model deleted Successfully!']);
+        if ($vehicleModel->delete())
+            return response(['status' => 'success', 'message' => 'Vehicle Model deleted Successfully!']);
 
-         return response(['status' => 'error', 'message' => 'Vehicle Model not deleted!']);
+        return response(['status' => 'error', 'message' => 'Vehicle Model not deleted!']);
+    }
+
+
+    public function vehicleModal($brand_id)
+    {
+        try {
+
+            $models = VehicleModel::where('status', '1')->where('brand_id', $brand_id)->get();
+
+            $records = [];
+            foreach ($models as $list) {
+                $records[] = [
+                    '_id' => $list->_id,
+                    'name' => $list->name
+                ];
+            }
+            return response(['status' => 'success', 'data' => $records]);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
+        }
     }
 }
