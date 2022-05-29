@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class PayHistoryController extends Controller
 {
-    public function index($vendor_id)
+    public function index()
     {
         try {
 
@@ -23,9 +23,9 @@ class PayHistoryController extends Controller
                     'customer_id'      => $pay->customer_id,
                     'customer_name'    => !empty($pay->customerName['name']) ? $pay->customerName['name'] : '',
                     'services_id'      => $pay->service_id,
-                    'serviceName'      => '',
+                    'service_name'     => '-',
                     'amount'           => $pay->amount,
-                    'comission_amount' => $pay->comission_amount,
+                    'comission_amount' => $pay->comission,
                     'total_amount'     => $pay->total_amount,
                 ];
             }

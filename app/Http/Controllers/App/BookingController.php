@@ -47,9 +47,9 @@ class BookingController extends AppController
                 'user_id'   => $this->AppAuth('_id'),
                 'vendor_id' => $request->vendor_id,
                 'service_id' => $request->service_id,
-                'amount'    => $request->amount,
+                'amount'    => $request->total_amount,
                 'comission' => 0,
-                'total_amount' => $request->amount
+                'total_amount' => $request->total_amount
             ];
 
             $this->payHistory($payHistory);
