@@ -64,27 +64,22 @@ class HomeController extends AppController
 
             $records = [];
             foreach ($lists as $list) {
-                 $records[] = [
-                    '_id'              => $list->_id,
-                    'name'             => $list->name,
-                    'email'            => $list->email,
-                    'mobile_no'        => $list->mobile_no,
-                    'business_name'    => $list->business_name,
-                    'business_email'   => $list->business_email,
-                    'phone'            => $list->phone,
-                    'city'             => $list->city,
-                    'pincode'          => $list->pincode,
-                    'country'          => $list->country,
-                    'state'            => $list->state,
-                    'gstin_no'         => $list->gstin_no,
-                    'address'          => $list->address,
-                    'description'      => $list->description,
-                    'store_status'     => $list->store_status,
-                    'verified_store'   => $list->verified_store,
-                    'whatsapp_no'      => $list->whatsapp_no,
-                    'bank_details'     => $list->bank_details,
-                    'created'          => $list->dFormat($list->created),
-                    'updated'          => $list->dFormat($list->updated)
+                  $records[] = [
+                    '_id'          => $list->_id,
+                    'user_id'      => $list->user_id,
+                    'name'         => $list->business_name,
+                    'email'        => $list->email,
+                    'mobile'       => $list->mobile,
+                    'city'         => $list->city,
+                    'state'        => $list->state,
+                    'country'      => $list->country,
+                    'address'      => $list->address,
+                    'description'  => $list->description,
+                    'latitude'     => $list->latitude,
+                    'longitude'    => $list->longitude,
+                    'logo'         => asset('shop/' . $list->icon),
+                    'cover_photo'  => asset('shop/' . $list->cover_photo),
+                    'created'      => $list->created
                 ];
             }
 

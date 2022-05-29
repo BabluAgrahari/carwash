@@ -14,8 +14,7 @@ use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\TimeSlapController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\PassbookController;
-
-
+use App\Http\Controllers\Admin\PayHistoryController;
 use App\Http\Controllers\App\AppController as Apps;
 use App\Http\Controllers\App\HomeController;
 use App\Http\Controllers\App\VendorController;
@@ -53,6 +52,8 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
     Route::resource('booking', BookingController::class);
     Route::resource('passbook', PassbookController::class);
+
+    Route::resource('pay-history', PayHistoryController::class);
 
     Route::get('user', [UserController::class, 'index']);
 });
