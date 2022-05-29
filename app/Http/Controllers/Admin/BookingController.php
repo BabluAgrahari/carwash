@@ -27,6 +27,8 @@ class BookingController extends Controller
                 'customer_name'  => !empty($list->customerName['name']) ? $list->customerName['name'] : '',
                 'vendor_id'      => $list->vendor_id,
                 'vendor_name'    => !empty($list->vendorName['business_name']) ? $list->vendorName['business_name'] : '',
+                'service_id'     => $list->service_id,
+                'service_name'   => !empty($list->serviceName['title']) ? $list->serviceName['title'] : '',
                 'booking_no'     => $list->booking_no,
                 'time_slab'      => $list->time_slab,
                 'booking_date'   => $list->dFormat($list->booking_date),

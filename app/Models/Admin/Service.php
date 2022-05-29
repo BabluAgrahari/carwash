@@ -25,6 +25,7 @@ class Service extends BaseModel
      }
 
 
+
      function vehicleModel(){
 
      	return $this->hasOne('App\Models\Admin\VehicleModel','_id','vehicle_model')->select('name');

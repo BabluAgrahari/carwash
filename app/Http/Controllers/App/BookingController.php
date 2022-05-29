@@ -5,6 +5,7 @@ namespace App\Http\Controllers\App;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Booking;
 use App\Models\Admin\Passbook;
+use App\Models\Admin\PayHistory;
 use App\Models\Admin\TimeSlap;
 use Exception;
 use Illuminate\Http\Request;
@@ -41,6 +42,18 @@ class BookingController extends AppController
             if (!$booking->save())
                 return response(['status' => 'error', 'message' => 'Your Service is not booked']);
             $this->passbook($request);
+
+            $payHistory = [
+                'user_id'   => $this->AppAuth('_id'),
+                'vendor_id' => $request->vendor_id,
+                'service_id' => $request->service_id,
+                'amount'    => $request->amount,
+                'comission' => 0,
+                'total_amount' => $request->amount
+            ];
+
+            $this->payHistory($payHistory);
+
             return response(['status' => 'success', 'message' => 'Your Service is booked']);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
@@ -52,8 +65,8 @@ class BookingController extends AppController
     {
         try {
 
-            if(empty($request) || !is_object($request))
-             return response(['status' => 'error', 'message' => 'Invalid data find']);
+            if (empty($request) || !is_object($request))
+                return response(['status' => 'error', 'message' => 'Invalid data find']);
 
             if ($request->payment_status === 'paid') {
 
@@ -63,7 +76,7 @@ class BookingController extends AppController
                     $existClosingAmount = $exist_p->closing_amount;
 
                 $passbook = new Passbook();
-                $passbook->customer_id =  $this->AppAuth('_id');
+                $passbook->customer_id = $this->AppAuth('_id');
                 $passbook->vendor_id   = $request->vendor_id;
                 $passbook->type        = 'credit';
                 $passbook->amount      =  $request->total_amount;
@@ -78,6 +91,23 @@ class BookingController extends AppController
                 $updatePassbook->closing_amount = $closing_amount;
                 $updatePassbook->save();
             }
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+
+    public function payHistory($request)
+    {
+        try {
+            $request = (object)$request;
+            $payHistory = new PayHistory();
+            $payHistory->vendor_id    = $request->vendor_id;
+            $payHistory->service_id   = $request->service_id;
+            $payHistory->amount       = $request->amount;
+            $payHistory->comission    = $request->comission;
+            $payHistory->total_amount = $request->total_amount;
+            $payHistory->save();
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
