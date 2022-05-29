@@ -17,9 +17,10 @@ class VendorController extends AppController
 
             $shop_ids = $service->shop_owner;
 
-            $lists = ShopOwner::whereIn('_id', $shop_ids)->get();
+            if (!empty($shop_ids) && is_array($shop_ids))
+               $lists = ShopOwner::whereIn('_id', $shop_ids)->get();
 
-            if ($lists->isEmpty())
+            if (empty($lists))
                 return response(['status' => 'error', 'message' => "no record found."]);
 
             $records = [];
