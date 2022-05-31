@@ -11,6 +11,7 @@ trait AppAuthTraits
     function AppAuth($key)
     {
         $user = session('AppUser');
+
         if (empty($user))
             return response()->json(['status' => FALSE, 'message' => 'User session Expired!']);
         if (!empty($user) && is_array($user)) {

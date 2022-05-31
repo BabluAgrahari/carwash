@@ -22,8 +22,7 @@ use App\Http\Controllers\App\TimeSlapController as TimeSlap;
 use App\Http\Controllers\App\BookingController as Booking;
 use App\Http\Controllers\App\ProfileController as Profile;
 use App\Http\Controllers\App\LoginController as Login;
-
-
+use App\Http\Controllers\App\ReviewController;
 
 Route::post('/login', [LoginController::class, 'store']);
 Route::post('register', [LoginController::class, 'register']);
@@ -80,6 +79,9 @@ Route::group(['prefix' => 'app', 'middleware' => 'appAuth'], function () {
     Route::post('update-location', [Profile::class, 'updateLocation']);
 
     Route::post('save-booking', [Booking::class, 'store']);
+
+    Route::get('review', [ReviewController::class, 'index']);
+    Route::post('review', [ReviewController::class, 'store']);
 });
 
 

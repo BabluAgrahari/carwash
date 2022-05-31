@@ -23,7 +23,7 @@ class AppAuth
             $token =  Str::substr($header, 7);
             $user = User::where('token', $token)->first();
             if (!empty($user) && $user->token == $token) {
-                $userData = ['_id' => $user->_id, 'phone_no' => $user->phone_no, 'otp' => $user->otp];
+                $userData = ['_id' => $user->_id, 'phone_no' => $user->phone_no, 'otp' => $user->otp,'name'=>empty($user->name)?'Avatar':$user->name];
                 session(['AppUser' => $userData]);
                  return $next($request);
             } else {
