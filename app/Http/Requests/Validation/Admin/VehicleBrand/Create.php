@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\validation\Admin\VehicleBrand;
+namespace App\Http\Requests\Validation\Admin\VehicleBrand;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;

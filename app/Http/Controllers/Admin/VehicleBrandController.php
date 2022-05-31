@@ -7,7 +7,7 @@ use App\Models\Admin\VehicleBrand;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Http\Requests\validation\Admin\VehicleBrand\Create;
+use App\Http\Requests\Validation\Admin\VehicleBrand\Create;
 
 class VehicleBrandController extends Controller
 {

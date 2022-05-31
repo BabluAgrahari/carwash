@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\validation\Admin\VehicleModal\Create;
+use App\Http\Requests\Validation\Admin\VehicleModal\Create;
 use App\Models\Admin\VehicleModel;
 use Exception;
 use Illuminate\Support\Facades\Auth;

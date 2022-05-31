@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\validation\Admin\Services\Create;
+use App\Http\Requests\Validation\Admin\Services\Create;
 use App\Models\Admin\Service;
 use Exception;
 use Illuminate\Support\Facades\Auth;

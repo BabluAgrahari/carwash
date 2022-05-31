@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\validation\Admin\Services;
+namespace App\Http\Requests\Validation\Admin\Services;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;

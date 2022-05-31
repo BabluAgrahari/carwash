@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 class LoginController extends AppController
@@ -67,7 +68,7 @@ class LoginController extends AppController
             $user->otp           = $data['otp'];
             $user->otp_date_time = $data['otp_date_time'];
             $user->phone_no      = $data['phone_no'];
-            $user->token         =  Str::random(60).time();
+            $user->token         =  Str::random(60) . time();
             $user->role          = 'customer';
             array_push($message, "OTP sent successfully");
         }
@@ -75,7 +76,12 @@ class LoginController extends AppController
         if ($user->save()) {
             $success['otp'] = $d['otp'];
             $success['msg'] = $message1;
-            return $success;
+            $response = Http::get('http://164.52.195.161/API/SendMsg.aspx?uname=20191682&pass=Cool@2020&send=WEBDUN&dest=' . $data['phone_no'] . '&msg=Hi Customer, Your OTP for phone verification is ' . $data['otp'] . '.');
+            if ($response->status() == 200) {
+                return $success;
+            } else {
+                return FALSE;
+            }
         } else {
             return FALSE;
         }
@@ -100,8 +106,8 @@ class LoginController extends AppController
         } elseif (!$token) {
             return response(['status' => 'error', 'message' => 'Invaliad OTP!']);
         } elseif ($token) {
-            $user = User::where('token',$token)->where('phone_no', $credentials['phone_no'])->first();
-            return response(['status' => 'success', 'message' => 'OTP verified successfully!','role'=>$user->role,'customer_id'=>$user->_id,'token'=>$token]);
+            $user = User::where('token', $token)->where('phone_no', $credentials['phone_no'])->first();
+            return response(['status' => 'success', 'message' => 'OTP verified successfully!', 'role' => $user->role, 'customer_id' => $user->_id, 'token' => $token]);
         }
     }
 
@@ -151,8 +157,7 @@ class LoginController extends AppController
         }
     }
 
-    public function logoOut(){
-
-
+    public function logoOut()
+    {
     }
 }
