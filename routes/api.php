@@ -66,6 +66,7 @@ Route::post('app/resend-otp', [Login::class, 'resendOtp']);
 Route::group(['prefix' => 'app', 'middleware' => 'appAuth'], function () {
     Route::get('service', [HomeController::class, 'serviceList']);
     Route::get('vendor', [HomeController::class, 'vendorList']);
+    Route::get('category', [HomeController::class, 'category']);
     Route::get('vendor-list/{id}', [VendorController::class, 'vendorList']);
     Route::get('vendor-detail/{id}', [VendorController::class, 'vendorDetails']);
     Route::get('vehicle-brand', [HomeController::class, 'vehicleBrand']);
