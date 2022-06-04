@@ -18,19 +18,19 @@ class Create extends FormRequest
     {
         return [
 
-            'category'          => 'required',
-            'vehicle_brand'     => 'required',
-            'vehicle_model'     => 'required',
+            // 'category'          => 'required',
+            // 'vehicle_brand'     => 'required',
+            // 'vehicle_model'     => 'required',
             'service_type'      => 'required|string',
             'title'             => 'required|string|max:255',
-            'sort_description'  => 'required|string|max:255',
-            'description'       => 'required|string|max:500',
+            // 'sort_description'  => 'required|string|max:255',
+            'description'       => 'nullable|string|max:500',
             // 'video'             => 'nullable|file|mimetypes:video/mp4',
             // 'multiple_images'   => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'service_charge'    => 'required|numeric',
-            'discount'          => 'required|numeric',
-            'gst_charges'       => 'required|numeric',
-            'total_charges'     => 'required|numeric',
+            // 'service_charge'    => 'required|numeric',
+            // 'discount'          => 'required|numeric',
+            // 'gst_charges'       => 'required|numeric',
+            // 'total_charges'     => 'required|numeric',
         ];
     }
     public function messages()

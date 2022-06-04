@@ -58,17 +58,17 @@ class ServiceController extends Controller
 
             $service = new Service();
             $service->user_id  = Auth::user()->_id;
-            $service->category          = $request->category;
-            $service->vehicle_brand     = $request->vehicle_brand;
-            $service->vehicle_model     = $request->vehicle_model;
+            // $service->category          = $request->category;
+            // $service->vehicle_brand     = $request->vehicle_brand;
+            // $service->vehicle_model     = $request->vehicle_model;
             $service->service_type      = $request->service_type;
             $service->title             = $request->title;
-            $service->sort_description  = $request->sort_description;
+            // $service->sort_description  = $request->sort_description;
             $service->description       = $request->description;
-            $service->service_charge    = $request->service_charge;
-            $service->discount          = $request->discount;
-            $service->gst_charges       = $request->gst_charges;
-            $service->total_charges     = $request->total_charges;
+            // $service->service_charge    = $request->service_charge;
+            // $service->discount          = $request->discount;
+            // $service->gst_charges       = $request->gst_charges;
+            // $service->total_charges     = $request->total_charges;
             $service->status            = $request->status;
             $service->video_url         = $request->video_url;
 
@@ -104,17 +104,17 @@ class ServiceController extends Controller
         try {
             $service = Service::find($id);
             $service->title             = $request->title;
-            $service->category          = $request->category;
-            $service->vehicle_brand     = $request->vehicle_brand;
-            $service->vehicle_model     = $request->vehicle_model;
+            // $service->category          = $request->category;
+            // $service->vehicle_brand     = $request->vehicle_brand;
+            // $service->vehicle_model     = $request->vehicle_model;
             $service->service_type      = $request->service_type;
-            $service->service_tittle    = $request->service_tittle;
-            $service->sort_description  = $request->sort_description;
+            $service->tittle            = $request->tittle;
+            // $service->sort_description  = $request->sort_description;
             $service->description       = $request->description;
-            $service->service_charge    = $request->service_charge;
-            $service->discount          = $request->discount;
-            $service->gst_charges       = $request->gst_charges;
-            $service->total_charges     = $request->total_charges;
+            // $service->service_charge    = $request->service_charge;
+            // $service->discount          = $request->discount;
+            // $service->gst_charges       = $request->gst_charges;
+            // $service->total_charges     = $request->total_charges;
             $service->status            = $request->status;
             $service->video_url         = $request->video_url;
 
