@@ -158,6 +158,7 @@ class HomeController extends AppController
             $records = [];
             foreach ($lists as $list) {
                 $records[] = [
+                    'id' => $list->_id,
                     'name'   => $list->name,
                     'status' => $list->isActive($list->status),
                     'icon'   => asset('icon/' . $list->icon),
