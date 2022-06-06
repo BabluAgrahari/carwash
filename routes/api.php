@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\TimeSlapController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\PassbookController;
 use App\Http\Controllers\Admin\PayHistoryController;
+use App\Http\Controllers\Admin\VendorServiceController;
 use App\Http\Controllers\App\AppController as Apps;
 use App\Http\Controllers\App\HomeController;
 use App\Http\Controllers\App\VendorController;
@@ -39,7 +40,9 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('veh-modal/{brand_id}', [VehicleModelController::class, 'vehicleModal']);
 
     Route::resource('services', ServiceController::class);
-    Route::get('vendor-services', [ServiceController::class, 'vendorServices']);
+    Route::get('services-by-cat/{id}', [ServiceController::class, 'servicesByCat']);
+    Route::resource('vendor-services', VendorServiceController::class);
+
 
     Route::resource('shop-owner', ShopOwnerController::class);
     Route::post('assign-services/{id}', [ShopOwnerController::class, 'assignServices']);
@@ -53,6 +56,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::resource('passbook', PassbookController::class);
 
     Route::resource('pay-history', PayHistoryController::class);
+    Route::get('vendor-account/{id}', [PayHistoryController::class, 'vendorAccount']);
 
     Route::get('user', [UserController::class, 'index']);
 });

@@ -24,21 +24,11 @@ class ServiceController extends Controller
                     '_id'             => $list->_id,
                     'user_id'         => $list->_id,
                     'title'           => $list->title,
-                    'sort_description' => $list->sort_description,
                     'description'     => $list->description,
-                    'service_charge'  => $list->service_charge,
-                    'discount'        => $list->discount,
-                    'gst_charges'     => $list->gst_charges,
-                    'total_charges'   => $list->total_charges,
-                    'vehicle_brand'   => !empty($list->vehicleBrand['name']) ? $list->vehicleBrand['name'] : '',
-                    'vehicle_brand_id' => $list->vehicle_brand,
                     'category'        => !empty($list->cCategory['name']) ? $list->cCategory['name'] : '',
                     'category_id'     => $list->category,
-                    'vehicle_model'   => !empty($list->vehicleModel['name']) ? $list->vehicleModel['name'] : '',
-                    'vehicle_model_id' => $list->vehicle_model,
-                    'service_type'    => $list->service_type,
                     'shop_owners'     => $list->shop_owners,
-                    'icon'           => !empty($list->icon) ? asset('services/' . $list->icon) : '',
+                    'icon'            => !empty($list->icon) ? asset('services/' . $list->icon) : '',
                     'status'          => $list->isActive($list->status),
                     'created'         => $list->dFormat($list->created),
                     'updated'         => $list->dFormat($list->updated)
@@ -58,25 +48,16 @@ class ServiceController extends Controller
 
             $service = new Service();
             $service->user_id  = Auth::user()->_id;
-            // $service->category          = $request->category;
-            // $service->vehicle_brand     = $request->vehicle_brand;
-            // $service->vehicle_model     = $request->vehicle_model;
-            $service->service_type      = $request->service_type;
+            $service->category          = $request->category;
             $service->title             = $request->title;
-            // $service->sort_description  = $request->sort_description;
             $service->description       = $request->description;
-            // $service->service_charge    = $request->service_charge;
-            // $service->discount          = $request->discount;
-            // $service->gst_charges       = $request->gst_charges;
-            // $service->total_charges     = $request->total_charges;
             $service->status            = $request->status;
-            $service->video_url         = $request->video_url;
 
             if (!empty($request->file('icon')))
                 $service->icon  = singleFile($request->file('icon'), 'services/');
 
-            if (!empty($request->hasFile('multiple_images')))
-                $service->multiple_images = json_encode(multipleFile($request->file('multiple_images'), 'services'));
+            // if (!empty($request->hasFile('multiple_images')))
+            //     $service->multiple_images = json_encode(multipleFile($request->file('multiple_images'), 'services'));
 
             if ($service->save())
                 return response(['status' => 'success', 'message' => 'Service created successfully!']);
@@ -100,30 +81,18 @@ class ServiceController extends Controller
 
     public function update(Create $request, $id)
     {
-
         try {
             $service = Service::find($id);
             $service->title             = $request->title;
-            // $service->category          = $request->category;
-            // $service->vehicle_brand     = $request->vehicle_brand;
-            // $service->vehicle_model     = $request->vehicle_model;
-            $service->service_type      = $request->service_type;
-            $service->tittle            = $request->tittle;
-            // $service->sort_description  = $request->sort_description;
+            $service->category          = $request->category;
             $service->description       = $request->description;
-            // $service->service_charge    = $request->service_charge;
-            // $service->discount          = $request->discount;
-            // $service->gst_charges       = $request->gst_charges;
-            // $service->total_charges     = $request->total_charges;
             $service->status            = $request->status;
-            $service->video_url         = $request->video_url;
-
 
             if (!empty($request->file('icon')))
                 $service->icon  = singleFile($request->file('icon'), 'icon/');
 
-            if (!empty($request->hasFile('multiple_images')))
-                $service->multiple_images = json_encode(multipleFile($request->file('multiple_images'), 'images'));
+            // if (!empty($request->hasFile('multiple_images')))
+            //     $service->multiple_images = json_encode(multipleFile($request->file('multiple_images'), 'images'));
 
             if ($service->save())
                 return response(['status' => 'success', 'message' => 'Service Updated successfully!']);
@@ -186,6 +155,27 @@ class ServiceController extends Controller
                 ];
             }
 
+            return response(['status' => 'success', 'data' => $records]);
+        } catch (Exception $e) {
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function servicesByCat($cat_id = false)
+    {
+        try {
+
+            if (!$cat_id)
+                return false;
+
+            $services = Service::select('_id', 'title')->where('category', $cat_id)->get();
+
+            foreach ($services as $list) {
+                $records[] = [
+                    'id' => $list->_id,
+                    'title' => $list->title
+                ];
+            }
             return response(['status' => 'success', 'data' => $records]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);

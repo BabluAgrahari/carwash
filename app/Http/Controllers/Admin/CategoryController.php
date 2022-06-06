@@ -16,25 +16,25 @@ class CategoryController extends Controller
         try {
             $lists = Category::desc()->get();
 
-           if($lists->isEmpty())
-                  return response(['status' =>'error', 'message' =>"no found any record."]);
+            if ($lists->isEmpty())
+                return response(['status' => 'error', 'message' => "no found any record."]);
 
 
             $records = [];
-            foreach($lists as $list){
-            $records[] = [
-             '_id'          =>$list->_id,
-             'user_id'      =>$list->user_id,
-             'name'         =>$list->name,
-             'status'       =>$list->isActive($list->status),
-             'icon'         =>(!empty($list->icon))?asset('icon/'.$list->icon):'',
-             'created'      =>$list->dFormat($list->created),
-             'updated'      =>$list->dFormat($list->updated)
-             ];
-             }
+            foreach ($lists as $list) {
+                $records[] = [
+                    '_id'          => $list->_id,
+                    'user_id'      => $list->user_id,
+                    'name'         => $list->name,
+                    'gst_charges'  => $list->gst_charges,
+                    'status'       => $list->isActive($list->status),
+                    'icon'         => (!empty($list->icon)) ? asset('icon/' . $list->icon) : '',
+                    'created'      => $list->dFormat($list->created),
+                    'updated'      => $list->dFormat($list->updated)
+                ];
+            }
 
-            return response(['status' =>'success', 'data' => $records]);
-
+            return response(['status' => 'success', 'data' => $records]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
@@ -47,6 +47,7 @@ class CategoryController extends Controller
             $category = new Category();
             $category->user_id = Auth::user()->_id;
             $category->name = $request->name;
+            $category->gst_charges = $request->gst_charges;
             $category->status = $request->status;
 
             if (!empty($request->file('icon')))
@@ -67,11 +68,11 @@ class CategoryController extends Controller
         try {
             $list = Category::find($id);
             $record = [
-              'name'   =>$list->name,
-              'status' =>$list->status,
-              'icon'   =>(!empty($list->icon))?asset('icon/'.$list->icon):'',
-              'created'=>$list->dFormat($list->created),
-              'updated'=>$list->dFormat($list->updated)
+                'name'   => $list->name,
+                'status' => $list->status,
+                'icon'   => (!empty($list->icon)) ? asset('icon/' . $list->icon) : '',
+                'created' => $list->dFormat($list->created),
+                'updated' => $list->dFormat($list->updated)
             ];
             return response(['status' => true, 'data' => $record]);
         } catch (Exception $e) {
@@ -85,6 +86,7 @@ class CategoryController extends Controller
             $category = Category::find($id);
 
             $category->name = $request->name;
+            $category->gst_charges = $request->gst_charges;
             $category->status = $request->status;
 
             if (!empty($request->file('icon')))
@@ -102,9 +104,9 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        if($category->delete())
-        return response(['status' => 'success', 'message' => 'Category deleted Successfully!']);
+        if ($category->delete())
+            return response(['status' => 'success', 'message' => 'Category deleted Successfully!']);
 
-         return response(['status' => 'error', 'message' => 'Category not deleted!']);
+        return response(['status' => 'error', 'message' => 'Category not deleted!']);
     }
 }
