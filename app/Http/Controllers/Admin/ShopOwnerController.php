@@ -128,27 +128,27 @@ class shopOwnerController extends Controller
     {
         try {
             $list = ShopOwner::find($id);
-            $record = [
-                '_id'              => $list->_id,
-                'name'             => $list->name,
-                'email'            => $list->email,
-                'mobile_no'        => $list->mobile_no,
-                'business_name'    => $list->business_name,
-                'business_email'   => $list->business_email,
-                'phone'            => $list->phone,
-                'city'             => $list->city,
-                'pincode'          => $list->pincode,
-                'country'          => $list->country,
-                'state'            => $list->state,
-                'gstin_no'         => $list->gstin_no,
-                'address'          => $list->address,
-                'description'      => $list->description,
-                'store_status'     => $list->store_status,
-                'verified_store'   => $list->verified_store,
-                'whatsapp_no'      => $list->whatsapp_no,
-                'bank_details'     => $list->bank_details
-            ];
-            return response(['status' => true, 'data' => $record]);
+            // $record = [
+            //     '_id'              => $list->_id,
+            //     'name'             => $list->name,
+            //     'email'            => $list->email,
+            //     'mobile_no'        => $list->mobile_no,
+            //     'business_name'    => $list->business_name,
+            //     'business_email'   => $list->business_email,
+            //     'phone'            => $list->phone,
+            //     'city'             => $list->city,
+            //     'pincode'          => $list->pincode,
+            //     'country'          => $list->country,
+            //     'state'            => $list->state,
+            //     'gstin_no'         => $list->gstin_no,
+            //     'address'          => $list->address,
+            //     'description'      => $list->description,
+            //     'store_status'     => $list->store_status,
+            //     'verified_store'   => $list->verified_store,
+            //     'whatsapp_no'      => $list->whatsapp_no,
+            //     'bank_details'     => $list->bank_details
+            // ];
+            return response(['status' => true, 'data' => $list]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }

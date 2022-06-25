@@ -1,0 +1,36 @@
+### login
+
+POST http://127.0.0.1:8000/api/login HTTP/1.1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "test@gmail.com",
+    "password": "123456"
+}
+
+### get user data
+
+GET http://127.0.0.1:8000/api/getUserDetails HTTP/1.1
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU1Nzc5MTg0LCJleHAiOjE2NTcyOTExODQsIm5iZiI6MTY1NTc3OTE4NCwianRpIjoiRFJJbkpZOVl5Tnd4aUtsTSIsInN1YiI6IjYyODljN2RlZGU3MjAwMDA5ZjAwMjkwOSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.LLcDEyOTmmAYB5MJ7qhktlVPG8c3FIHPoXC8LmVvq8w
+
+
+### get current vendor
+
+GET http://127.0.0.1:8000/api/shop-owner/6289c7dede7200009f002908 HTTP/1.1
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU1Nzc5MTg0LCJleHAiOjE2NTcyOTExODQsIm5iZiI6MTY1NTc3OTE4NCwianRpIjoiRFJJbkpZOVl5Tnd4aUtsTSIsInN1YiI6IjYyODljN2RlZGU3MjAwMDA5ZjAwMjkwOSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.LLcDEyOTmmAYB5MJ7qhktlVPG8c3FIHPoXC8LmVvq8w
+
+
+### GET VENDOR BOOKINGS
+
+GET http://127.0.0.1:8000/api/booking/6289c7dede7200009f002908 HTTP/1.1
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU1Nzc5MTg0LCJleHAiOjE2NTcyOTExODQsIm5iZiI6MTY1NTc3OTE4NCwianRpIjoiRFJJbkpZOVl5Tnd4aUtsTSIsInN1YiI6IjYyODljN2RlZGU3MjAwMDA5ZjAwMjkwOSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.LLcDEyOTmmAYB5MJ7qhktlVPG8c3FIHPoXC8LmVvq8w
+
+### GET SERVICES
+
+GET http://127.0.0.1:8000/api/services HTTP/1.1
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU1Nzc5MTg0LCJleHAiOjE2NTcyOTExODQsIm5iZiI6MTY1NTc3OTE4NCwianRpIjoiRFJJbkpZOVl5Tnd4aUtsTSIsInN1YiI6IjYyODljN2RlZGU3MjAwMDA5ZjAwMjkwOSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.LLcDEyOTmmAYB5MJ7qhktlVPG8c3FIHPoXC8LmVvq8w

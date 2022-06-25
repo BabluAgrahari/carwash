@@ -7,6 +7,7 @@ use App\Models\Admin\Booking;
 use App\Models\Admin\Service;
 use Exception;
 use Illuminate\Http\Request;
+use App\Models\Admin\Passbook;
 
 class BookingController extends Controller
 {
@@ -43,6 +44,13 @@ class BookingController extends Controller
         // } catch (Exception $e) {
         //     return response(['status' => 'error', 'message' => $e->getMessage()]);
         // }
+    }
+
+    public function show($id)
+    {
+        $bookings = Booking::where('vendor_id', $id)->desc()->get();
+
+        return response(['status' => true, 'data' => $bookings]);
     }
 
 

@@ -8,7 +8,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
-
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -26,10 +25,11 @@ class LoginController extends Controller
                 ], 400);
             }
         } catch (JWTException $e) {
-            return $credentials;
+            // return $credentials;
             return response()->json([
                 'status' => false,
                 'message' => 'Could not create token.',
+                'error' => $e->getMessage(),
             ], 500);
         }
         //Token created, return with success response and jwt token
@@ -76,6 +76,14 @@ class LoginController extends Controller
             'email'     => $data['email'],
             'role'      =>  'admin',
             'password'  => Hash::make($data['password'])
+        ]);
+    }
+
+    public function getUserDetails() 
+    {
+        return response()->json([
+            'status' => true,
+            'data' => auth()->user(),
         ]);
     }
 }

@@ -31,7 +31,7 @@ Route::post('register', [LoginController::class, 'register']);
 Route::group(['middleware' => ['jwt.verify']], function () {
 
     Route::get('logout', [LoginController::class, 'logout']);
-    Route::get('getUserDetails', [LoginController::class, 'get_user']);
+    Route::get('getUserDetails', [LoginController::class, 'getUserDetails']);
 
     Route::resource('category', CategoryController::class);
 

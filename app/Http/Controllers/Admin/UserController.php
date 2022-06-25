@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Validation\Admin\TimeSlap\DisableServices;
 use App\Http\Requests\Validation\Admin\TimeSlap\UpdateTimeSlap;
 use App\Models\Admin\TimeSlap;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
