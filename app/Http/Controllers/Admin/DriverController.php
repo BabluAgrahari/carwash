@@ -26,7 +26,7 @@ class DriverController extends Controller
             foreach ($lists as $list) {
                 $records[] = [
                     '_id'     => $list->_id,
-                    'vendor_id'=> $list->vendor_id,
+                    'vendor_id' => $list->vendor_id,
                     'name'    => $list->name,
                     'email'   => $list->email,
                     'phone'   => $list->phone,
@@ -52,7 +52,7 @@ class DriverController extends Controller
     {
         try {
             $driver = new Driver();
-            $driver->vendor_id = Auth::user()->_id;
+            $driver->vendor_id = $request->vendor_id ?? Auth::user()->_id;
             $driver->name    = $request->name;
             $driver->email   = $request->email;
             $driver->phone   = $request->phone;
@@ -64,6 +64,9 @@ class DriverController extends Controller
 
             if (!empty($request->file('image')))
                 $driver->image  = singleFile($request->file('image'), 'profile/');
+
+            if (!empty($request->file('dl')))
+                $driver->image  = singleFile($request->file('dl'), 'profile/');
 
             if (!$driver->save())
                 return response(['status' => 'error', 'message' => 'Driver not created Successfully!']);

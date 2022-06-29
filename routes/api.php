@@ -57,6 +57,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
     Route::resource('pay-history', PayHistoryController::class);
     Route::get('vendor-account/{id}', [PayHistoryController::class, 'vendorAccount']);
+    Route::get('pay-history', [PayHistoryController::class, 'payHistory']);
 
     Route::get('user', [UserController::class, 'index']);
 });

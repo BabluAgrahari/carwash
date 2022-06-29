@@ -28,6 +28,7 @@ class PayHistoryController extends Controller
                     'amount'           => $pay->amount,
                     'comission_amount' => $pay->comission,
                     'total_amount'     => $pay->total_amount,
+                    'created'          => $pay->dFormat($pay->created),
                 ];
             }
 
@@ -41,11 +42,36 @@ class PayHistoryController extends Controller
     {
         try {
             $vendor = ShopOwner::find($id);
-            $bank_account = !empty($vendor->bank_details[0])?$vendor->bank_details[0]:'';
-            $record = ['store_name'=>$vendor->business_name,'bank_account'=>$bank_account];
-             return response(['status' => 'success', 'data' => $record]);
+
+            $bank_account = !empty($vendor->bank_details[0]) ? $vendor->bank_details[0] : '';
+            $bank_account = [
+                "holder_name" => $bank_account['holder_name'],
+                'account_number' => $bank_account['account_number'], 'bank_name' => $bank_account['bank_name'], 'ifsc_code' => $bank_account['ifsc_code']
+            ];
+
+            $record = ['id' => $id, 'store_name' => $vendor->business_name, 'amount' => $vendor->total_amount, 'bank_account' => $bank_account];
+            return response(['status' => 'success', 'data' => $record]);
         } catch (Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
+    }
+
+    public function payHistory(Request $request)
+    {
+
+        $pay_id   = $request->pay_id;
+        $amount   = $request->amount;
+        $store_id = $request->store_id;
+
+        $histories = [];
+        $payHistory = PayHistory::find($pay_id);
+        if (!empty($payHistory->payHistory))
+            $histories  = $payHistory->payHistory;
+
+        $histories[] = ['amount' => $request->amount, 'store_id' => $store_id];
+        $payHistory->payHistory = $histories;
+
+        if ($payHistory->save())
+            return response(['status' => 'success', 'message' => 'Payhistory not created Successfully!']);
     }
 }
